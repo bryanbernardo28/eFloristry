@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">e-Floristry</string>
+
+    <!--Main-->
+    <string name="label_loading">Loading&#8230;</string>
+
+    <!--Login-->
+    <string name="label_email">Email</string>
+    <string name="label_password">Password</string>
+    <string name="btn_label_login">Login</string>
+
+    <!--SharePreference-->
+    <string name="spMemberDetails">com.example.eflorisity.memberDetails</string>
+    <!--SharePreferences Key-->
+    <string name="spKeyIsLoggedIn">isLoggedIn</string>
+    <string name="spKeyToken">token</string>
+    <string name="spKeyFirstName">firstName</string>
+    <string name="spKeyLastName">lastName</string>
+    <string name="spKeyMiddleName">middleName</string>
+    <string name="spKeyEmail">email</string>
+    <string name="spKeyContactNumber">contactNumber</string>
+    <string name="spKeyPhotoUrl">photoUrl</string>
+    <string name="spKeyRole">role</string>
+
+
+
+
+    <!--Logged In Member-->
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_account">Account</string>
+    
+    
+    <!--Account -->
+    <string name="account_information">Account Information</string>
+    <string name="address_book">Address Book</string>
+    <string name="policies">Policies</string>
+    <string name="help">Help</string>
+    <string name="logout">Logout</string>
+</resources>
