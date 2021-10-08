@@ -16,12 +16,6 @@
 - Retrofit
 - Okhttp
 
-
-### Database
-- Retrofit
-- Okhttp
-
-
 ### Database
 - mySQL
 - SQLite for cart
