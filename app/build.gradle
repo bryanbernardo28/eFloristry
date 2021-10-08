@@ -33,6 +33,21 @@ android {
     buildFeatures {
         viewBinding true
     }
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    'src\\main\\res',
+                    'src\\main\\res\\layouts',
+                    'src\\main\\res\\layouts\\home',
+                    'src\\main\\res\\layouts\\loading',
+                    'src\\main\\res\\layouts\\account',
+                    'src\\main\\res\\layouts\\orders',
+                    'src\\main\\res\\layouts\\cart',
+                    'src\\main\\res\\layouts\\recyclerview',
+                    'src\\main\\res\\layouts\\checkout'
+            ]
+        }
+    }
 }
 
 dependencies {
@@ -50,6 +65,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.2'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
