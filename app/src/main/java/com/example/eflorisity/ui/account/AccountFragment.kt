@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.eflorisity.HomeActivity
 import com.example.eflorisity.R
+import com.example.eflorisity.SQLiteDbHelper
 import com.example.eflorisity.SharedPref
 import com.example.eflorisity.databinding.FragmentAccountBinding
 import com.example.eflorisity.login.LoginActivity
@@ -20,6 +21,7 @@ import com.example.eflorisity.login.LoginActivity
 class AccountFragment : Fragment() {
 
     private lateinit var accountViewModel: AccountViewModel
+    private lateinit var sqliteDbHelper:SQLiteDbHelper
     private var _binding: FragmentAccountBinding? = null
 
     // This property is only valid between onCreateView and
@@ -42,11 +44,13 @@ class AccountFragment : Fragment() {
 //            textView.text = it
 //        })
 
+        sqliteDbHelper = SQLiteDbHelper(requireContext())
+
         val logoutButton:Button = binding.btnAccountLogoutId
         logoutButton.setOnClickListener {
             var memberDetailsSp = SharedPref(requireContext(),getString(R.string.spMemberDetails))
             memberDetailsSp.clearSharedPreference()
-
+            sqliteDbHelper.truncateCart()
             val goToLoginActivity = Intent(activity, LoginActivity::class.java)
             startActivity(goToLoginActivity)
             activity?.finish()

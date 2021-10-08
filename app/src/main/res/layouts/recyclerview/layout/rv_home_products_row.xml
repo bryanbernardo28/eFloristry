@@ -5,15 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
     app:cardElevation="10dp"
-    tools:ignore="DuplicateClickableBoundsCheck">
+    tools:ignore="DuplicateClickableBoundsCheck"
+    android:focusable="true">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_home_product_row_id"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?android:attr/selectableItemBackground"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <TextView
             android:id="@+id/tv_home_products_name_id"
@@ -53,7 +57,6 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
-            android:text="₱"
             android:textColor="#F44336"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

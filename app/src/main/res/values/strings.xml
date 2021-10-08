@@ -3,6 +3,7 @@
 
     <!--Main-->
     <string name="label_loading">Loading&#8230;</string>
+    <string name="label_loading_login">Logging In&#8230;</string>
 
     <!--Login-->
     <string name="label_email">Email</string>
@@ -14,6 +15,7 @@
     <!--SharePreferences Key-->
     <string name="spKeyIsLoggedIn">isLoggedIn</string>
     <string name="spKeyToken">token</string>
+    <string name="spKeyId">id</string>
     <string name="spKeyFirstName">firstName</string>
     <string name="spKeyLastName">lastName</string>
     <string name="spKeyMiddleName">middleName</string>
@@ -23,19 +25,36 @@
     <string name="spKeyRole">role</string>
 
 
-
-
     <!--Logged In Member-->
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_orders">Orders</string>
+    <string name="title_cart">Cart</string>
+    <string name="title_reports">Reports</string>
     <string name="title_account">Account</string>
-    
-    
+
+
     <!--Account -->
     <string name="account_information">Account Information</string>
     <string name="address_book">Address Book</string>
     <string name="policies">Policies</string>
     <string name="help">Help</string>
     <string name="logout">Logout</string>
+
+
+    <!--View Item-->
+    <string name="add_to_cart">Add</string>
+    <string name="go_back_to_list">Back</string>
+
+
+    <!--Cart-->
+    <string name="btn_checkout">Checkout</string>
+
+    <!--Checkout-->
+    <string name="btn_place_order">Place Order</string>
+    <string name="place_order_success">Place Order Successfull</string>
+    <string-array name="str_payment_method_array">
+        <item>Cash on delivery</item>
+<!--        <item>PayPal</item>-->
+    </string-array>
 </resources>

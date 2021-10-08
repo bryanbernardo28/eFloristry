@@ -23,10 +23,9 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var plaintextPassword : EditText
     private lateinit var loginButton : Button
     private lateinit var errorMessageTextView: TextView
+    private lateinit var loadingDialog : LoginLoadingDialog
     lateinit var viewModel: LoginViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
@@ -36,8 +35,11 @@ class LoginActivity : AppCompatActivity() {
         errorMessageTextView = findViewById(R.id.tv_login_errormessage_id)
 
 
+        val description = getString(R.string.label_loading_login)
+        loadingDialog = LoginLoadingDialog(description,this)
         initViewModel()
         loginButton.setOnClickListener {
+            loadingDialog.startLoading()
             submitLogin()
         }
 
@@ -48,7 +50,6 @@ class LoginActivity : AppCompatActivity() {
         var password = plaintextPassword.text.toString()
         val member = MemberLoginDetails(email,password,"Android")
         viewModel.loginMember(member)
-
     }
 
 
@@ -86,6 +87,7 @@ class LoginActivity : AppCompatActivity() {
 
     fun getMemberDetails(memberDetails:MemberResponse){
         var memberDetailsSp = SharedPref(this,getString(R.string.spMemberDetails))
+        memberDetailsSp.save(getString(R.string.spKeyId),memberDetails.member?.id)
         memberDetailsSp.save(getString(R.string.spKeyFirstName), memberDetails.member?.first_name)
         memberDetailsSp.save(getString(R.string.spKeyLastName),memberDetails.member?.last_name)
         memberDetailsSp.save(getString(R.string.spKeyMiddleName),memberDetails.member?.middle_name)
@@ -95,8 +97,10 @@ class LoginActivity : AppCompatActivity() {
         memberDetailsSp.save(getString(R.string.spKeyToken),memberDetails.token)
         memberDetailsSp.save(getString(R.string.spKeyIsLoggedIn),true)
 //            memberDetailsSp.save(getString(R.string.spKeyRole),memberDetailsJson.getString("role"))
+        loadingDialog.dismissLoading()
         val goToHomeActivity = Intent(this, HomeActivity::class.java)
         startActivity(goToHomeActivity)
+        finish()
 
     }
 }
