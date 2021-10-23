@@ -1,13 +1,12 @@
 package com.example.eflorisity.login
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.eflorisity.login.data.MemberLoginDetails
 import com.example.eflorisity.login.data.MemberResponse
-import com.example.eflorisity.login.retrofit.LoginRetroInstance
 import com.example.eflorisity.login.retrofit.LoginRetroServiceInterface
+import com.example.eflorisity.retrofit.RetroInstance
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,7 +22,7 @@ class LoginViewModel: ViewModel() {
     }
 
     fun loginMember(memberLoginDetails: MemberLoginDetails){
-        val retroInstance = LoginRetroInstance.getInstance()
+        val retroInstance = RetroInstance.getInstance()
         val retroService = retroInstance.create(LoginRetroServiceInterface::class.java)
         val call = retroService.loginMember(memberLoginDetails)
         call.enqueue(object:Callback<MemberResponse?>{

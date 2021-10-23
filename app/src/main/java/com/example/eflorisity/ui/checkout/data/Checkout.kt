@@ -1,21 +1,28 @@
 package com.example.eflorisity.ui.checkout.data
 
-import com.example.eflorisity.login.data.MemberDetails
-import com.example.eflorisity.ui.home.data.ProductDetails
-import org.json.JSONArray
-import org.json.JSONObject
-
 data class Checkout(
     val member_id:String,
+    val contact_number:String,
+    val email_address:String,
+    val region:String,
+    val state:String,
+    val city:String,
+    val barangay:String,
+    val postal_code:String,
+    val address:String,
+    val payment_method:String,
+    val notes:String,
     val total_amount:String,
-    val products: ArrayList<ProductCheckout>
+    val carts: ArrayList<ProductCheckout>
 )
 
 data class ProductCheckout(
-    val product_id:String?,
-    val quantity:Int?
+    val id:String?,
+    val price:String?,
+    val qty:Int?
 )
 
 data class CheckoutResponse(
     val success:Boolean
 )
+

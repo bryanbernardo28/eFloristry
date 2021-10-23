@@ -4,11 +4,14 @@
     <!--Main-->
     <string name="label_loading">Loading&#8230;</string>
     <string name="label_loading_login">Logging In&#8230;</string>
+    <string name="label_loading_register">Verifying&#8230;</string>
+    <string name="label_loading_resend">Re-sending&#8230;</string>
 
     <!--Login-->
     <string name="label_email">Email</string>
     <string name="label_password">Password</string>
     <string name="btn_label_login">Login</string>
+    <string name="btn_resend_verification">Re-send Verification</string>
 
     <!--SharePreference-->
     <string name="spMemberDetails">com.example.eflorisity.memberDetails</string>
@@ -49,12 +52,57 @@
 
     <!--Cart-->
     <string name="btn_checkout">Checkout</string>
+    <string-array name="long_clicked_row_action">
+        <item>Delete</item>
+    </string-array>
 
     <!--Checkout-->
     <string name="btn_place_order">Place Order</string>
     <string name="place_order_success">Place Order Successfull</string>
+    <string name="delivery_address_str">Delivery Address</string>
+    <string name="address">Address</string>
     <string-array name="str_payment_method_array">
-        <item>Cash on delivery</item>
-<!--        <item>PayPal</item>-->
+        <item>Cash On Delivery</item>
+        <!--        <item>PayPal</item>-->
+    </string-array>
+    <string name="address_inforation_request_code">1</string>
+    <string name="order_notes_hint">Order Notes</string>
+
+
+    <!--Address Activity-->
+    <string name="region_hint">Region</string>
+    <string name="province_hint">Province</string>
+    <string name="city_hint">City</string>
+    <string name="barangay_hint">Barangay</string>
+    <string name="postal_code_hint">Postal Code</string>
+    <string name="detailed_address_hint">Detailed Address</string>
+    <string name="detailed_address_helper_hint">Unit number,house number,building,street name</string>
+    <string name="btn_submit">Submit</string>
+    <string-array name="region_list">
+        <item>Metro Manila</item>
+        <item>Mindanao</item>
+        <item>North Luzon</item>
+        <item>South Luzon</item>
+        <item>Visayas</item>
+    </string-array>
+    <string name="completed_address_hint">Complete Address</string>
+
+    <!--Register-->
+    <string name="register_label">Register</string>
+    <string name="firstname_hint">First Name</string>
+    <string name="middlename_hint">Middle Name</string>
+    <string name="lastname_hint">Last Name</string>
+    <string name="emailaddress_hint">Email Address</string>
+    <string name="contactnumber_hint">Contact Number</string>
+    <string name="membertype_hint">Member Type</string>
+    <string name="birthday_hint">Birthday</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="btn_submit_register">Submit</string>
+    <string name="re_send_verification_text">Re-send Verification Code</string>
+    <string name="re_send_button">Re-send</string>
+    <string-array name="member_type_choice">
+        <item>Buyer</item>
+        <item>Seller</item>
     </string-array>
 </resources>

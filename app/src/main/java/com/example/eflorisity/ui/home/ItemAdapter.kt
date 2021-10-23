@@ -59,7 +59,7 @@ class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ViewHolder>() {
         val id = productDataSet?.get(position)!!.id
         val supplierId = productDataSet?.get(position)!!.supplier_id
         val photoUrl = productDataSet?.get(position)!!.photo_url
-        val imageUrl = "${config.startUrl}${config.baseUrl}${photoUrl}"
+        val imageUrl = "${photoUrl}"
         val productName = productDataSet?.get(position)!!.name
         val productPrice = productDataSet?.get(position)!!.price
         val productDiscount = productDataSet?.get(position)!!.discount

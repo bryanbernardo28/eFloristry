@@ -11,7 +11,7 @@ import retrofit2.http.POST
 
 interface CheckoutRetroServiceInterface {
 
-    @POST("add_order_products")
+    @POST("order_products/add_order_products")
     @Headers("Accept: application/json","Content-Type: application/json")
     fun addOrderProducts(@Header("Authorization") token: String,@Body params: Checkout): Call<CheckoutResponse>
 }

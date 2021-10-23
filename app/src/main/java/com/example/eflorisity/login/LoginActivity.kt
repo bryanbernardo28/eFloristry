@@ -1,6 +1,7 @@
 package com.example.eflorisity.login
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,9 +15,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.eflorisity.HomeActivity
 import com.example.eflorisity.R
+import com.example.eflorisity.register.RegisterActivity
 import com.example.eflorisity.SharedPref
 import com.example.eflorisity.login.data.MemberLoginDetails
 import com.example.eflorisity.login.data.MemberResponse
+import com.example.eflorisity.register.ResendVerificationActivity
+import okhttp3.internal.format
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var plaintextEmail : EditText
@@ -31,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
 
         plaintextEmail = findViewById(R.id.et_login_email_id)
         plaintextPassword = findViewById(R.id.et_login_password_id)
-        loginButton = findViewById(R.id.btn_login_button_id)
+        loginButton = findViewById(R.id.btn_login_login_id)
         errorMessageTextView = findViewById(R.id.tv_login_errormessage_id)
 
 
@@ -43,6 +47,27 @@ class LoginActivity : AppCompatActivity() {
             submitLogin()
         }
 
+        val fromActivity = intent.getStringExtra("fromActivity")
+
+        if (!fromActivity.isNullOrEmpty()){
+            Log.d("login-result","From Activity: ${fromActivity.toString()}")
+            var message: String? = null
+            errorMessageTextView.setTextColor(Color.BLACK)
+            if (fromActivity.equals("register")){
+                message = "Register Successful.\nWe sent verification to your email."
+                errorMessageTextView.visibility = View.VISIBLE
+            }
+            else if(fromActivity.equals("resendVerification")){
+                if (intent.getBooleanExtra("isVerified",false)){
+                    message = "Your account is already verified."
+                }
+                else{
+                    message = "Re-send verification to email successful."
+                }
+                errorMessageTextView.visibility = View.VISIBLE
+            }
+            errorMessageTextView.text = message
+        }
     }
 
     private fun submitLogin(){
@@ -52,11 +77,22 @@ class LoginActivity : AppCompatActivity() {
         viewModel.loginMember(member)
     }
 
+    fun goToRegister(view:View){
+        val goToRegisterActivity = Intent(this, RegisterActivity::class.java)
+        startActivity(goToRegisterActivity)
+        finish()
+    }
+
+    fun goToResendverification(view:View){
+        val goToResendVerificationActivity = Intent(this, ResendVerificationActivity::class.java)
+        startActivity(goToResendVerificationActivity)
+        finish()
+    }
+
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         viewModel.getLoginMemberObservable().observe(this, Observer<MemberResponse?>{
-
             if (it != null){
                 handleResponse(it)
                 Log.d("login-result",it.toString())
@@ -65,6 +101,7 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this,"Failed to Log In.",Toast.LENGTH_LONG).show()
                 Log.d("login-result",it.toString())
             }
+            loadingDialog.dismissLoading()
         })
     }
 
@@ -77,11 +114,13 @@ class LoginActivity : AppCompatActivity() {
             getMemberDetails(it)
         }
         else{
+            errorMessageTextView.setTextColor(Color.parseColor("#FF2C2C"))
             if (!errorMessageTextView.isVisible){
                 errorMessageTextView.visibility = View.VISIBLE
             }
             errorMessageTextView.setText(it.errors.toString())
         }
+        loadingDialog.dismissLoading()
     }
 
 
@@ -97,10 +136,16 @@ class LoginActivity : AppCompatActivity() {
         memberDetailsSp.save(getString(R.string.spKeyToken),memberDetails.token)
         memberDetailsSp.save(getString(R.string.spKeyIsLoggedIn),true)
 //            memberDetailsSp.save(getString(R.string.spKeyRole),memberDetailsJson.getString("role"))
-        loadingDialog.dismissLoading()
+
         val goToHomeActivity = Intent(this, HomeActivity::class.java)
         startActivity(goToHomeActivity)
         finish()
+    }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val goToHomeActivity = Intent(this, HomeActivity::class.java)
+        startActivity(goToHomeActivity)
+        finish()
     }
 }

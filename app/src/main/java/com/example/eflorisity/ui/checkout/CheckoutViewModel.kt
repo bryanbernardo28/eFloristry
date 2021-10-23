@@ -3,13 +3,11 @@ package com.example.eflorisity.ui.checkout
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.eflorisity.login.data.MemberResponse
 import com.example.eflorisity.ui.checkout.data.Checkout
 import com.example.eflorisity.ui.checkout.data.CheckoutResponse
-import com.example.eflorisity.ui.checkout.retrofit.CheckoutRetroInstance
 import com.example.eflorisity.ui.checkout.retrofit.CheckoutRetroServiceInterface
+import com.example.eflorisity.retrofit.RetroInstance
 import com.google.gson.Gson
-import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,7 +21,7 @@ class CheckoutViewModel:ViewModel() {
     }
 
     fun addOrderProducts(orderProducts:Checkout,bearer:String){
-        val retroInstance = CheckoutRetroInstance.getInstance()
+        val retroInstance = RetroInstance.getInstance()
         val retroService = retroInstance.create(CheckoutRetroServiceInterface::class.java)
         val jsonString = Gson().toJson(orderProducts)
         val call = retroService.addOrderProducts(token = bearer,params = orderProducts)

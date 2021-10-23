@@ -8,8 +8,7 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface LoginRetroServiceInterface {
-
-    @POST("login_submit")
+    @POST("login/login_submit")
     @Headers("Accept: application/json","Content-Type: application/json")
     fun loginMember(@Body params: MemberLoginDetails): Call<MemberResponse>
 }
