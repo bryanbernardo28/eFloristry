@@ -101,7 +101,7 @@ class ViewItemActivity : AppCompatActivity() {
             }
             else{
                 Toast.makeText(this,"Failed to add to cart.",Toast.LENGTH_LONG).show()
-                Log.d("product-cart-result",it.toString())
+                Log.d("product-cart-result","$it")
             }
             loadingDialog.dismissLoading()
         })

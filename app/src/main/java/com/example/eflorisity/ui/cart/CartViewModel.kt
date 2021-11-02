@@ -38,9 +38,10 @@ class CartViewModel : ViewModel() {
                 if (response.isSuccessful){
                     Log.d("cart-result","CartViewModel isSuccessful")
                     myCartLiveData.postValue(response.body())
+                    errorMyCart.postValue(response.code())
                 }
                 else{
-                    Log.d("cart-result","CartViewModel isNotSuccessful,${response.code()}")
+                    Log.d("cart-result","CartViewModel isNotSuccessful, ${response.code()}")
                     errorMyCart.postValue(response.code())
                 }
             }
@@ -54,10 +55,10 @@ class CartViewModel : ViewModel() {
     }
 
 
-    fun deleteItemFromCartFun(id:String){
+    fun deleteItemFromCartFun(member_id:String,id:String){
         val retroInstance = RetroInstance.getInstance()
         val retroService = retroInstance.create(CartRetroServiceInterface::class.java)
-        val call = retroService.deleteFromMyCart(id)
+        val call = retroService.deleteFromMyCart(member_id,id)
         call.enqueue(object:Callback<DeleteItemFromCartResponse>{
             override fun onResponse(
                 call: Call<DeleteItemFromCartResponse>,

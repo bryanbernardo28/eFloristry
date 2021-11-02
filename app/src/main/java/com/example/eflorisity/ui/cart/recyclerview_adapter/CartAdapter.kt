@@ -1,24 +1,21 @@
-package com.example.eflorisity.ui.cart
+package com.example.eflorisity.ui.cart.recyclerview_adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.example.eflorisity.Config
 import com.example.eflorisity.R
 import com.example.eflorisity.ui.cart.data.Cart
-import com.example.eflorisity.ui.home.ItemsAdapter
 import com.example.eflorisity.ui.home.data.ProductDetails
 import com.squareup.picasso.Picasso
-import org.w3c.dom.Text
 import androidx.fragment.app.FragmentActivity
 import com.example.eflorisity.login.LoginLoadingDialog
+import com.example.eflorisity.ui.cart.CartFragment
+import com.example.eflorisity.ui.cart.CartViewModel
 
 
 class CartAdapter: RecyclerView.Adapter<CartAdapter.ViewHolder>() {
@@ -28,12 +25,16 @@ class CartAdapter: RecyclerView.Adapter<CartAdapter.ViewHolder>() {
     private lateinit var context: Context
     private lateinit var cartViewModel: CartViewModel
     private lateinit var loadingDialog: LoginLoadingDialog
+    private var totalPrice:Int = 0
+    private lateinit var tvTotal:TextView
 
-    fun CartAdapter(context: Context, cartViewModel: CartViewModel,cartList:ArrayList<Cart>,loadingDialog:LoginLoadingDialog){
+    fun CartAdapter(context: Context, cartViewModel: CartViewModel, cartList:ArrayList<Cart>, loadingDialog:LoginLoadingDialog,tvTotal:TextView){
         this.cartList = cartList
         this.context = context
         this.cartViewModel = cartViewModel
         this.loadingDialog = loadingDialog
+        this.tvTotal = tvTotal
+        totalPrice = 0
     }
 
     fun get(pos:Int):String?{
@@ -65,8 +66,8 @@ class CartAdapter: RecyclerView.Adapter<CartAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val config = Config()
         val product:ProductDetails = cartList?.get(position)!!.product
+        val member_id = cartList!![position].member_id;
         val photoUrl = product.photo_url
         val imageUrl = "${photoUrl}"
         val productName = product.name
@@ -74,7 +75,13 @@ class CartAdapter: RecyclerView.Adapter<CartAdapter.ViewHolder>() {
         val productPriceLabaled = "Price: ₱$productPrice"
         val productQuantity: Int = cartList?.get(position)!!.quantity.toInt()
         val productQuantityLabeled = "Quantity: $productQuantity"
-        val productTotalPrice = "Total Price: ₱${productPrice!!.toInt() * productQuantity}"
+        val productTotalPriceComputed = productPrice!!.toInt() * productQuantity
+        val productTotalPrice = "Total Item Price: ₱$productTotalPriceComputed"
+        totalPrice += productTotalPriceComputed
+
+        if (position == cartList!!.size-1){
+            tvTotal.text = "Total Price: ₱$totalPrice"
+        }
 
         Picasso.get().load(imageUrl).placeholder(R.drawable.no_image_available).resize(450, 450).into(holder.productImage);
         holder.productName.text = productName
@@ -82,7 +89,7 @@ class CartAdapter: RecyclerView.Adapter<CartAdapter.ViewHolder>() {
         holder.productQuantity.text = productQuantityLabeled
         holder.productTotalPrice.text = productTotalPrice
         holder.constraintLayout.setOnLongClickListener{
-            val newFragment = CartFragment.LongClickedItem(product,cartViewModel,loadingDialog)
+            val newFragment = CartFragment.LongClickedItem(member_id,product, cartViewModel, loadingDialog)
             newFragment.show((context as FragmentActivity).supportFragmentManager, "LongClicked")
             true
         }

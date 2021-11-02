@@ -113,6 +113,7 @@ class RegisterActivity : AppCompatActivity() {
         tilMemberType = findViewById(R.id.til_register_membertype_id)
         tilBirthday = findViewById(R.id.til_register_birthday_id)
         tilPassword = findViewById(R.id.til_register_password_id)
+        tilAddress = findViewById(R.id.til_register_address_id)
 
         //Button Initialize
         submitBtn = findViewById(R.id.btn_register_submit_id)
@@ -195,14 +196,14 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
-        viewModel.getRegisteredMemberObservable().observe(this, androidx.lifecycle.Observer {
+        viewModel.getRegisteredMemberObservable().observe(this, {
             if (it != null){
 //                handleResponse(it)
                 if (it.success == true){
                     clearAllErrors()
                     Toast.makeText(this,"Register Successful",Toast.LENGTH_LONG).show()
                     Log.d("register-result","Register Successful")
-                    Log.d("register-result",it.toString())
+                    Log.d("register-result","$it")
                     val goToLoginActivity = Intent(this, LoginActivity::class.java)
                     goToLoginActivity.putExtra("fromActivity","register")
                     startActivity(goToLoginActivity)

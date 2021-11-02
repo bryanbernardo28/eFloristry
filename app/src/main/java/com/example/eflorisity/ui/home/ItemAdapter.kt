@@ -7,11 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.example.eflorisity.Config
-import com.example.eflorisity.HomeActivity
 import com.example.eflorisity.R
 import com.example.eflorisity.ui.home.data.ProductDetails
 import com.squareup.picasso.Picasso
@@ -55,7 +52,6 @@ class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Get element from your dataset at this position and replace the
         // contents of the view with that
-        val config = Config()
         val id = productDataSet?.get(position)!!.id
         val supplierId = productDataSet?.get(position)!!.supplier_id
         val photoUrl = productDataSet?.get(position)!!.photo_url

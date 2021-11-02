@@ -25,6 +25,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:text="@string/account_information"
@@ -35,6 +36,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
             android:text="@string/address_book"
             android:textColor="#000000" />
 
@@ -43,6 +45,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
             android:text="@string/policies"
             android:textColor="#000000" />
 
@@ -51,6 +54,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
             android:text="@string/help"
             android:textColor="#000000" />
     </LinearLayout>

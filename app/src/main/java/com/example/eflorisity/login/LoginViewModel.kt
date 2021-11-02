@@ -3,10 +3,23 @@ package com.example.eflorisity.login
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.eflorisity.login.data.MemberLoginDetails
-import com.example.eflorisity.login.data.MemberResponse
+import com.example.eflorisity.login.data.*
 import com.example.eflorisity.login.retrofit.LoginRetroServiceInterface
+import com.example.eflorisity.retrofit.PayPalBasicAuthInstance
+import com.example.eflorisity.retrofit.PayPalRetroInstance
 import com.example.eflorisity.retrofit.RetroInstance
+//import com.paypal.checkout.PayPalCheckout
+//import com.paypal.checkout.approve.OnApprove
+//import com.paypal.checkout.cancel.OnCancel
+//import com.paypal.checkout.createorder.CreateOrder
+//import com.paypal.checkout.createorder.CurrencyCode
+//import com.paypal.checkout.createorder.OrderIntent
+//import com.paypal.checkout.createorder.UserAction
+//import com.paypal.checkout.error.OnError
+//import com.paypal.checkout.order.Amount
+//import com.paypal.checkout.order.AppContext
+//import com.paypal.checkout.order.Order
+//import com.paypal.checkout.order.PurchaseUnit
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,9 +30,11 @@ import java.lang.StringBuilder
 class LoginViewModel: ViewModel() {
     var loginLiveData: MutableLiveData<MemberResponse?> = MutableLiveData()
 
+
     fun getLoginMemberObservable(): MutableLiveData<MemberResponse?> {
         return loginLiveData
     }
+
 
     fun loginMember(memberLoginDetails: MemberLoginDetails){
         val retroInstance = RetroInstance.getInstance()
@@ -48,9 +63,7 @@ class LoginViewModel: ViewModel() {
             }
 
         })
-
     }
-
 
     fun getError(jsonObjectErrors: JSONObject) : String{
         val keys = jsonObjectErrors.names()

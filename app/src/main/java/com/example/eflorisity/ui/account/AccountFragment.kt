@@ -36,11 +36,12 @@ class AccountFragment : Fragment() {
 
         memberDetailsSp = SharedPref(requireContext(),getString(R.string.spMemberDetails))
         val isLoggedIn = memberDetailsSp.getValueBoolean(getString(R.string.spKeyIsLoggedIn),false)
-        if (!isLoggedIn){
-            val goToLoginActivity = Intent(activity, LoginActivity::class.java)
-            startActivity(goToLoginActivity)
-            activity?.finish()
-        }
+
+//        if (!isLoggedIn){
+//            val goToLoginActivity = Intent(activity, LoginActivity::class.java)
+//            startActivity(goToLoginActivity)
+//            activity?.finish()
+//        }
 
 
         val logoutButton:Button = binding.btnAccountLogoutId

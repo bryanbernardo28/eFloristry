@@ -2,6 +2,8 @@ package com.example.eflorisity.login.data
 
 import android.media.Image
 import com.google.gson.JsonObject
+import com.paypal.checkout.createorder.*
+//import com.paypal.checkout.createorder.*
 import org.json.JSONObject
 import java.io.File
 
@@ -30,3 +32,36 @@ data class MemberDetails(
 
 data class Email(val email:String)
 data class EmailResponse(val success: Boolean?,val is_verified:Boolean?,val errors: JsonObject)
+//
+//data class PayPalBody(val grant_type:String)
+//data class PayPalAccessTokenResponse(
+//    val access_token:String,
+//)
+//
+//data class PayPalOrderBody(
+//    val intent:String,
+//    val purchase_units:ArrayList<PayPalPurchaseUnits>
+//)
+//
+//data class PayPalPurchaseUnits(
+//    val amount:PayPalAmounts
+//)
+//
+//data class PayPalAmounts(
+//    val currency_code:String,
+//    val value:String,
+//)
+//
+//
+//data class PayPalOrderResponse(
+//    val id:String,
+//    val status:String,
+//    val links:ArrayList<CreatedOrderLinks>
+//)
+//
+//data class CreatedOrderLinks(
+//    val href:String,
+//    val rel:String,
+//    val method:String
+//)
+

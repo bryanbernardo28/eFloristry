@@ -1,11 +1,8 @@
 package com.example.eflorisity.login.retrofit
 
-import com.example.eflorisity.login.data.MemberLoginDetails
-import com.example.eflorisity.login.data.MemberResponse
+import com.example.eflorisity.login.data.*
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface LoginRetroServiceInterface {
     @POST("login/login_submit")

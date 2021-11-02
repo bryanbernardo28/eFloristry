@@ -1,4 +1,4 @@
-package com.example.eflorisity.ui.checkout
+package com.example.eflorisity.ui.checkout.recyclerview_adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.eflorisity.Config
 import com.example.eflorisity.R
-import com.example.eflorisity.ui.cart.CartAdapter
 import com.example.eflorisity.ui.cart.data.Cart
 import com.example.eflorisity.ui.home.data.ProductDetails
 import com.squareup.picasso.Picasso
@@ -48,10 +46,9 @@ class CheckoutListAdapter: RecyclerView.Adapter<CheckoutListAdapter.ViewHolder>(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val config = Config()
         val product: ProductDetails = cartList?.get(position)!!.product
         val photoUrl = product.photo_url
-        val imageUrl = "${config.startUrl}${config.baseUrl}${photoUrl}"
+        val imageUrl = "$photoUrl"
         val productName = product.name
         val productPrice = product.price
         val productPriceLabaled = "Price: ₱$productPrice"

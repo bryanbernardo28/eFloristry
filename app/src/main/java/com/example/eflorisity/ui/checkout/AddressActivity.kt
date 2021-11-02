@@ -35,7 +35,7 @@ class AddressActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_address)
-
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         tilRegion = findViewById(R.id.til_address_region_id)
         tilProvince = findViewById(R.id.til_address_province_id)
@@ -110,6 +110,11 @@ class AddressActivity : AppCompatActivity() {
         val sendAddress = Intent()
         setResult(Activity.RESULT_CANCELED, sendAddress)
         finish()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     fun checkInputAddressHasError(region:String,province:String,city:String,barangay:String,postalCode:String,detailedAddress:String):Boolean{

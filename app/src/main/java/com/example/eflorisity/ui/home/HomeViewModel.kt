@@ -73,9 +73,6 @@ class HomeViewModel: ViewModel() {
                 else{
                     val error = JSONObject(response.errorBody()!!.string())
                     Log.d("product-cart-result","Error: $error")
-//                    val errorMessageString = getError(error.getJSONObject("errors"))
-//                    val memberResponse = ProductCartResponse(false,errorMessageString)
-//                    addToCartReponse.postValue(memberResponse)
                 }
             }
 

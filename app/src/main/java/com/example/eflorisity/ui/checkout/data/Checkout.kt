@@ -13,6 +13,9 @@ data class Checkout(
     val payment_method:String,
     val notes:String,
     val total_amount:String,
+    val status:Int,
+    val paypalOrderID:String?,
+    val paypalPayerID:String?,
     val carts: ArrayList<ProductCheckout>
 )
 

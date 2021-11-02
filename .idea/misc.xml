@@ -3,23 +3,28 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/drawable/baseline_local_shipping.xml" value="0.35625" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/drawable/baseline_person_24.xml" value="0.25677083333333334" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/drawable/outline_chevron_right_24.xml" value="0.31666666666666665" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/drawable/outline_shopping_bag.xml" value="0.35625" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/drawable/outline_shopping_bag_24.xml" value="0.35625" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/drawable/outline_shopping_cart_24.xml" value="0.35625" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/drawable/vertical_divider.xml" value="0.25677083333333334" />
-        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layout/activity_home.xml" value="0.25" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layout/activity_home.xml" value="0.33" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layout/activity_register.xml" value="0.67" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layout/activity_resend_verification.xml" value="0.2986111111111111" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layout/fragment_account.xml" value="0.33" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layout/fragment_cancelled.xml" value="0.3359375" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layout/fragment_dashboard.xml" value="0.3359375" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layout/fragment_home.xml" value="0.3359375" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layout/fragment_return_refund.xml" value="0.3359375" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layout/orders_fragment.xml" value="0.3359375" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layout/rv_home_products_row.xml" value="0.3359375" />
-        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/account/layout/fragment_account.xml" value="0.3359375" />
-        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/cart/layout/fragment_cart.xml" value="0.25" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/account/layout/fragment_account.xml" value="0.33" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/cart/layout/fragment_cart.xml" value="0.33" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/checkout/drawable/ic_baseline_local_shipping_36.xml" value="0.35625" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/checkout/layout/activity_address.xml" value="0.33" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/checkout/layout/activity_checkout.xml" value="0.5" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/home/layout/activity_home.xml" value="0.3359375" />
@@ -27,10 +32,18 @@
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/home/layout/fragment_home.xml" value="0.3359375" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/loading/layout/progress_dialog.xml" value="0.25" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/orders/layout/fragment_dashboard.xml" value="0.3359375" />
-        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/orders/layout/orders_fragment.xml" value="0.2986111111111111" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/orders/layout/orders_fragment.xml" value="0.33" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/orders/orders_fragment.xml" value="0.31875" />
-        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/recyclerview/layout/rv_cart_products_row.xml" value="0.5" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/recyclerview/layout/rv_cart_products_row.xml" value="0.33" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/recyclerview/layout/rv_home_products_row.xml" value="0.2986111111111111" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/recyclerview/layout/rv_orders_list_row.xml" value="0.33" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/track/layout/activity_track_orders.xml" value="0.3359375" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/track/layout/fragment_cancelled.xml" value="0.3359375" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/track/layout/fragment_return_refund.xml" value="0.3359375" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/track/layout/fragment_to_pay.xml" value="0.3359375" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/track/layout/fragment_to_receive.xml" value="0.3359375" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/track/layout/fragment_to_review.xml" value="0.3359375" />
+        <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/layouts/track/layout/fragment_to_ship.xml" value="0.3359375" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/menu/bottom_nav_menu.xml" value="0.3359375" />
         <entry key="..\:/BRYAN BERNARDO/Desktop/eFlorisity/eFloristry/app/src/main/res/xml/network_security_config.xml" value="0.17864583333333334" />
         <entry key="..\:/bryan/Documents/AndroidStudioProjects/app/src/main/res/layout/activity_main.xml" value="0.33" />

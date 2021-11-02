@@ -1,8 +1,10 @@
 package com.example.eflorisity.login
 
+import android.R.attr
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,17 +12,26 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.eflorisity.BuildConfig
 import com.example.eflorisity.HomeActivity
 import com.example.eflorisity.R
-import com.example.eflorisity.register.RegisterActivity
 import com.example.eflorisity.SharedPref
-import com.example.eflorisity.login.data.MemberLoginDetails
-import com.example.eflorisity.login.data.MemberResponse
+import com.example.eflorisity.login.data.*
+import com.example.eflorisity.register.RegisterActivity
 import com.example.eflorisity.register.ResendVerificationActivity
-import okhttp3.internal.format
+import com.paypal.checkout.PayPalCheckout
+import com.paypal.checkout.approve.OnApprove
+import com.paypal.checkout.config.CheckoutConfig
+import com.paypal.checkout.config.Environment
+import com.paypal.checkout.config.SettingsConfig
+import com.paypal.checkout.createorder.*
+import com.paypal.checkout.order.*
+import com.paypal.checkout.paymentbutton.PayPalButton
+import java.math.BigDecimal
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var plaintextEmail : EditText
@@ -29,15 +40,37 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var errorMessageTextView: TextView
     private lateinit var loadingDialog : LoginLoadingDialog
     lateinit var viewModel: LoginViewModel
+    private val tag = "login-result"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        val memberDetailsSp = SharedPref(this,getString(R.string.spMemberDetails))
+        val isLoggedIn = memberDetailsSp.getValueBoolean(getString(R.string.spKeyIsLoggedIn),false)
+        if (isLoggedIn){
+            val goToHomeActivity = Intent(this, HomeActivity::class.java)
+            startActivity(goToHomeActivity)
+            finish()
+        }
+
 
         plaintextEmail = findViewById(R.id.et_login_email_id)
         plaintextPassword = findViewById(R.id.et_login_password_id)
         loginButton = findViewById(R.id.btn_login_login_id)
         errorMessageTextView = findViewById(R.id.tv_login_errormessage_id)
 
+//        val config = CheckoutConfig(
+//            application = application,
+//            clientId = "AQSTMJeLX_XDTRWpkDtjqIIWRAH3P_KGNmPrVFlpPq1hznBBeqTRUjrd0WxVy1gMAvscfovlrz0PhBfW",
+//            environment = Environment.SANDBOX,
+//            returnUrl = "com.example.eflorisity://paypalpay",
+//            currencyCode = CurrencyCode.USD,
+//            userAction = UserAction.PAY_NOW,
+//            settingsConfig = SettingsConfig(
+//                loggingEnabled = true
+//            )
+//        )
+//        PayPalCheckout.setConfig(config)
 
         val description = getString(R.string.label_loading_login)
         loadingDialog = LoginLoadingDialog(description,this)
@@ -50,7 +83,7 @@ class LoginActivity : AppCompatActivity() {
         val fromActivity = intent.getStringExtra("fromActivity")
 
         if (!fromActivity.isNullOrEmpty()){
-            Log.d("login-result","From Activity: ${fromActivity.toString()}")
+            Log.d("login-result","From Activity: ${fromActivity}")
             var message: String? = null
             errorMessageTextView.setTextColor(Color.BLACK)
             if (fromActivity.equals("register")){
@@ -69,6 +102,37 @@ class LoginActivity : AppCompatActivity() {
             errorMessageTextView.text = message
         }
     }
+
+//    fun processPayment(){
+//        PayPalCheckout.start(
+//            CreateOrder { createOrderActions ->
+//                val order = Order(
+//                    intent = OrderIntent.CAPTURE,
+//                    appContext = AppContext(
+//                        userAction = UserAction.PAY_NOW,
+//                        shippingPreference = ShippingPreference.NO_SHIPPING
+//                    ),
+//                    purchaseUnitList = listOf(
+//                        PurchaseUnit(
+//                            amount = Amount(
+//                                currencyCode = CurrencyCode.USD,
+//                                value = "10.00",
+//                            ),
+//                            shipping = Shipping()
+//                        )
+//                    ),
+//
+//
+//                )
+//                createOrderActions.create(order)
+//            },
+//            OnApprove { approval ->
+//                approval.orderActions.capture { captureOrderResult ->
+//                    Log.i("CaptureOrder", "Order successfully captured: $captureOrderResult")
+//                }
+//            }
+//        )
+//    }
 
     private fun submitLogin(){
         var email = plaintextEmail.text.toString()
@@ -95,11 +159,11 @@ class LoginActivity : AppCompatActivity() {
         viewModel.getLoginMemberObservable().observe(this, Observer<MemberResponse?>{
             if (it != null){
                 handleResponse(it)
-                Log.d("login-result",it.toString())
+                Log.d("login-result","$it")
             }
             else{
                 Toast.makeText(this,"Failed to Log In.",Toast.LENGTH_LONG).show()
-                Log.d("login-result",it.toString())
+                Log.d("login-result","login: $it")
             }
             loadingDialog.dismissLoading()
         })
@@ -122,7 +186,6 @@ class LoginActivity : AppCompatActivity() {
         }
         loadingDialog.dismissLoading()
     }
-
 
     fun getMemberDetails(memberDetails:MemberResponse){
         var memberDetailsSp = SharedPref(this,getString(R.string.spMemberDetails))

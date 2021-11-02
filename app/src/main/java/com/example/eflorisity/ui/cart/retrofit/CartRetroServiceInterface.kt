@@ -11,7 +11,7 @@ interface CartRetroServiceInterface {
     @Headers("Accept: application/json","Content-Type: application/json")
     fun getMyCart(@Path("id") id: String): Call<ArrayList<Cart>>
 
-    @DELETE("cart/delete/{id}")
+    @DELETE("cart/delete/{member_id}/{id}")
     @Headers("Accept: application/json","Content-Type: application/json")
-    fun deleteFromMyCart(@Path("id") id: String): Call<DeleteItemFromCartResponse>
+    fun deleteFromMyCart(@Path("member_id") member_id:String,@Path("id") id: String): Call<DeleteItemFromCartResponse>
 }

@@ -1,6 +1,5 @@
 package com.example.eflorisity.retrofit
 
-import com.example.eflorisity.Config
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -8,15 +7,13 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 import com.google.gson.GsonBuilder
 
-import com.google.gson.Gson
-
-
-
 
 class RetroInstance {
     companion object{
-        val URL = Config()
-        val BASE_URL = "http://${URL.baseUrl}/api/mobile/"
+//        val baseUrl = "http://10.0.2.2:8000"
+//        val baseUrl = "http://192.168.50.69:8000"
+        val baseUrl = "https://www.eflouristry.com"
+        val BASE_URL = "$baseUrl/api/mobile/"
 
         fun getInstance(): Retrofit {
             val client = OkHttpClient.Builder()
