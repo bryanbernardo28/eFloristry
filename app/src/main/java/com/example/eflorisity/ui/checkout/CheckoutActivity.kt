@@ -272,7 +272,7 @@ class CheckoutActivity : AppCompatActivity() {
                 }
                 val orderId = approval.data.orderId
                 val payerId = approval.data.payerId
-//                cashOnDelivery(orderId,payerId)
+                cashOnDelivery(orderId,payerId)
                 Log.d(paypalTag,"Order Id : ${approval.data.orderId}\nPayer Id: ${approval.data.payerId}")
 
             },
