@@ -21,6 +21,11 @@ class RegisterViewModel:ViewModel() {
         return resendVerificationLiveData
     }
 
+    var verificationCodeLiveData: MutableLiveData<CodeResponse> = MutableLiveData()
+    fun getVerificationCodeData():MutableLiveData<CodeResponse> {
+        return verificationCodeLiveData
+    }
+
     fun registerMember(memberDetails: MemberDetails){
         val retroInstance = RetroInstance.getInstance()
         val retroService = retroInstance.create(RegisterRetroServiceInterface::class.java)
@@ -70,6 +75,29 @@ class RegisterViewModel:ViewModel() {
 
             override fun onFailure(call: Call<EmailResponse>, t: Throwable) {
                 resendVerificationLiveData.postValue(null)
+            }
+
+        })
+    }
+
+    fun submitVerificationCode(code:Code){
+        val retroInstance = RetroInstance.getInstance()
+        val retroService = retroInstance.create(RegisterRetroServiceInterface::class.java)
+        val call = retroService.submitVerificationCode(code)
+        call.enqueue(object:Callback<CodeResponse>{
+            override fun onResponse(call: Call<CodeResponse>, response: Response<CodeResponse>) {
+                if (response.isSuccessful){
+                    verificationCodeLiveData.postValue(response.body())
+                    Log.d("register-result","isSuccessful")
+                }
+                else{
+                    Log.d("register-result","Error Resending Verification")
+                    verificationCodeLiveData.postValue(null)
+                }
+            }
+
+            override fun onFailure(call: Call<CodeResponse>, t: Throwable) {
+                verificationCodeLiveData.postValue(null)
             }
 
         })

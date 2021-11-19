@@ -1,6 +1,7 @@
 package com.example.eflorisity.ui.home.data
 
 import android.os.Parcelable
+import com.example.eflorisity.ui.orders.data.Product
 import kotlinx.android.parcel.Parcelize
 
 //data class Products(val products:List<ProductDetails>)
@@ -13,12 +14,23 @@ data class ProductDetails(
         val price:String?,
         val discount:String?,
         val photo_url:String?,
-        val is_discounted:Int?
+        val is_discounted:Int?,
+        val stocks:String?
         ): Parcelable
 
 data class ProductCart(
         val member_id:String,
         val product_id:String,
+        val quantity:Int
+)
+
+data class ProductCartNotIn(
+        val product_id:String,
+        var quantity:Int
+)
+
+data class ProductCartListNotIn(
+        val carts:ArrayList<ProductCartNotIn>
 )
 
 data class ProductCartResponse(

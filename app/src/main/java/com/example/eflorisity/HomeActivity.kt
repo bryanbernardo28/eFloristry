@@ -53,15 +53,15 @@ class HomeActivity : AppCompatActivity(){
         }
     }
 
-    fun checkLoggedIn(it:MenuItem){
+    private fun checkLoggedIn(it:MenuItem){
         val memberDetailsSp = SharedPref(this,getString(R.string.spMemberDetails))
         val isLoggedIn = memberDetailsSp.getValueBoolean(getString(R.string.spKeyIsLoggedIn),false)
         if (!isLoggedIn && it.itemId == R.id.navigation_account){
             intentToLoginActivity()
         }
-        else if (!isLoggedIn && it.itemId == R.id.navigation_cart){
-            intentToLoginActivity()
-        }
+//        else if (!isLoggedIn && it.itemId == R.id.navigation_cart){
+//            intentToLoginActivity()
+//        }
         else if (!isLoggedIn && it.itemId == R.id.navigation_orders){
             intentToLoginActivity()
         }

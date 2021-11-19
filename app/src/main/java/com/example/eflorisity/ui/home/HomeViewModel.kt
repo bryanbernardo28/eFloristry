@@ -3,7 +3,7 @@ package com.example.eflorisity.ui.home
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.eflorisity.login.retrofit.HomeRetroServiceInterface
+import com.example.eflorisity.ui.home.retrofit.HomeRetroServiceInterface
 import com.example.eflorisity.ui.home.data.ProductCart
 import com.example.eflorisity.ui.home.data.ProductCartResponse
 import com.example.eflorisity.ui.home.data.ProductDetails
@@ -18,6 +18,7 @@ class HomeViewModel: ViewModel() {
     var productsLiveData: MutableLiveData<List<ProductDetails>> = MutableLiveData()
     var errorProducts : MutableLiveData<Int> = MutableLiveData()
     var addToCartReponse: MutableLiveData<ProductCartResponse> = MutableLiveData()
+    var computedQuantity:MutableLiveData<Int> = MutableLiveData()
 
     fun getAddToCartResponse(): MutableLiveData<ProductCartResponse> {
         return addToCartReponse
@@ -27,6 +28,10 @@ class HomeViewModel: ViewModel() {
     }
     fun getErrorProductsObservable(): MutableLiveData<Int>{
         return errorProducts
+    }
+
+    fun getComputedQuantityObservable(): MutableLiveData<Int>{
+        return computedQuantity
     }
 
     fun getProducts(token:String){
@@ -73,6 +78,7 @@ class HomeViewModel: ViewModel() {
                 else{
                     val error = JSONObject(response.errorBody()!!.string())
                     Log.d("product-cart-result","Error: $error")
+                    addToCartReponse.postValue(null)
                 }
             }
 
@@ -93,6 +99,27 @@ class HomeViewModel: ViewModel() {
             errorString.append(value[0]).append("\n")
         }
         return errorString.toString()
+    }
+
+    fun computeQuantity(qty:Int,stock:Int,isPlus:Boolean){
+        var qtyVal = if (isPlus){
+            increment(qty,stock)
+        } else{
+            decrement(qty)
+        }
+        computedQuantity.postValue(qtyVal)
+    }
+
+    private fun decrement(qty:Int):Int {
+        var qtyVal = qty
+        if (qty > 1) qtyVal-- else qty
+        return qtyVal
+    }
+
+    private fun increment(qty:Int, stock:Int):Int {
+        var qtyVal = qty
+        if (stock > qty) qtyVal++ else qty
+        return qtyVal
     }
 
 //    private val _text = MutableLiveData<String>().apply {

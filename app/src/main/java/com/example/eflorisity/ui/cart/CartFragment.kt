@@ -35,13 +35,16 @@ import com.example.eflorisity.ui.cart.recyclerview_adapter.CartAdapter
 import com.example.eflorisity.ui.checkout.CheckoutActivity
 import com.example.eflorisity.ui.home.data.ProductDetails
 import android.R.attr.data
-
-
+import com.example.eflorisity.ui.home.HomeViewModel
+import com.example.eflorisity.ui.home.data.ProductCartListNotIn
+import com.example.eflorisity.ui.home.data.ProductCartNotIn
+import com.google.gson.Gson
 
 
 class CartFragment : Fragment() {
 
     private lateinit var cartViewModel: CartViewModel
+    private lateinit var homeViewModel:HomeViewModel
     private var _binding: FragmentCartBinding? = null
 //    lateinit var sqliteDbHelper: SQLiteDbHelper
     private lateinit var rvAdapter: CartAdapter
@@ -53,6 +56,7 @@ class CartFragment : Fragment() {
     private lateinit var swipeRefresh:SwipeRefreshLayout
 
     private lateinit var cartList:ArrayList<Cart>
+    private var isLoggedIn:Boolean = false
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -64,83 +68,77 @@ class CartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         cartViewModel = ViewModelProvider(this).get(CartViewModel::class.java)
+        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+
         _binding = FragmentCartBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         swipeRefresh = binding.srlCartItemcartId
+        tvSubtotal = binding.tvCartProductSubtotalPrice
+        recyclerView = binding.rvCartProductId
+        btnCheckout = binding.btnCartCheckoutId
 
         memberDetailsSp = SharedPref(requireContext(),getString(R.string.spMemberDetails))
-        val isLoggedIn = memberDetailsSp.getValueBoolean(getString(R.string.spKeyIsLoggedIn),false)
+        isLoggedIn = memberDetailsSp.getValueBoolean(getString(R.string.spKeyIsLoggedIn),false)
         val description = getString(R.string.label_loading)
         loadingDialog = LoginLoadingDialog(description,requireActivity())
 
-        if (isLoggedIn) {
-            tvSubtotal = binding.tvCartProductSubtotalPrice
-            recyclerView = binding.rvCartProductId
-            btnCheckout = binding.btnCartCheckoutId
+        initRecyclerView()
+        val member_id = memberDetailsSp.getValueString(getString(R.string.spKeyId))
+        initViewModel(member_id)
 
-            val member_id = memberDetailsSp.getValueString(getString(R.string.spKeyId))
-            if (!loadingDialog.isShowing()){
-                loadingDialog.startLoading()
+
+        swipeRefresh.setOnRefreshListener {
+            if(isLoggedIn){
                 getCart(member_id!!)
             }
-
-
-            initRecyclerView()
-            cartViewModel.getMyCartObservable().observe(viewLifecycleOwner, {
-                if (!it.isNullOrEmpty()){
-//                    Log.d("cart-result","CartFragment: ${it.toString()}")
-                    resetTextViewPrice()
-                    recyclerView.visibility = View.VISIBLE
-                    rvAdapter.CartAdapter(requireContext(),cartViewModel,it,loadingDialog,tvSubtotal)
-                    rvAdapter.notifyDataSetChanged()
-                    btnCheckout.isEnabled = true
-                    cartList = it
-                }
-                else{
-                    Log.d("cart-result","CartFragment: Else $it")
-                    cartIsEmpty("Cart is empty")
-                }
-                stopRefreshLoading()
-            })
-
-            cartViewModel.getDeleteFromCartResponseObservable().observe(viewLifecycleOwner, Observer {
-                if (it.success){
-                    Log.d("cart-result","CartFragment: $it")
-                    cartViewModel.getMyCartFun(member_id!!)
-                }
-                else{
-                    Log.d("cart-result","CartFragment: Else $it")
-                }
-                stopRefreshLoading()
-            })
-
-            cartViewModel.getErrorMyCartObservable().observe(viewLifecycleOwner, Observer {
-                if (it != 200){
-                    if(it == 429){
-                        cartIsEmpty("Too many request, try again later.")
-                    }
-                    Log.d("cart-result","Error Code: $it")
-                }
-                stopRefreshLoading()
-            })
-
-            swipeRefresh.setOnRefreshListener {
-                getCart(member_id!!)
+            else{
+                getMyCartNotIn()
             }
+        }
 
-
-            btnCheckout.setOnClickListener {
+        btnCheckout.setOnClickListener {
+            if (isLoggedIn){
                 val goToCheckoutActivity = Intent(activity, CheckoutActivity::class.java)
                 goToCheckoutActivity.putExtra("cartList",cartList)
                 activity?.startActivityForResult(goToCheckoutActivity,getString(R.string.checkout_request_code).toInt())
             }
+            else{
+                val goToLoginActivity = Intent(requireContext(), LoginActivity::class.java)
+                startActivity(goToLoginActivity)
+                activity?.finish()
+            }
         }
-
+        if (isLoggedIn) {
+            if (!loadingDialog.isShowing()){
+                loadingDialog.startLoading()
+                getCart(member_id.toString())
+            }
+        }
+        else{
+            getMyCartNotIn()
+        }
         return root
     }
 
-    class LongClickedItem(val member_id: String,val product:ProductDetails,val cartViewModel: CartViewModel,val loadingDialog:LoginLoadingDialog) : DialogFragment(){
+
+    fun getMyCartNotIn(){
+        val spMyCart = SharedPref(requireContext(),getString(R.string.spMyCart))
+        val spKeyMyCart = getString(R.string.spKeyCartStringSet)
+        val productsInCart = spMyCart.getValueString(spKeyMyCart)
+        if (!productsInCart.isNullOrEmpty()){
+            val productInMyCartList = Gson().fromJson(productsInCart.toString(),ProductCartListNotIn::class.java)
+            if (!loadingDialog.isShowing()){
+                loadingDialog.startLoading()
+                cartViewModel.getMyCartNotIn(productInMyCartList)
+            }
+        }
+        else{
+            cartIsEmpty("Cart is empty")
+        }
+    }
+
+    class LongClickedItem(val member_id: String?,val productDetails:ProductDetails,val cartViewModel: CartViewModel,val loadingDialog:LoginLoadingDialog,val isLoggedIn:Boolean,var cartList:ArrayList<Cart>) : DialogFragment(){
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             return activity?.let {
                 val builder = AlertDialog.Builder(it)
@@ -148,8 +146,25 @@ class CartFragment : Fragment() {
                     .setItems(R.array.long_clicked_row_action,
                         DialogInterface.OnClickListener { _, which ->
                             if(which == 0){
-                                loadingDialog.startLoading()
-                                cartViewModel.deleteItemFromCartFun(member_id,product.id!!)
+                                if (!loadingDialog.isShowing()){
+                                    loadingDialog.startLoading()
+                                    if (isLoggedIn){
+                                        cartViewModel.deleteItemFromCartFun(member_id!!,productDetails.id!!)
+                                    }
+                                    else{
+                                        val spMyCart = SharedPref(requireContext(),getString(R.string.spMyCart))
+                                        val spKeyMyCart = getString(R.string.spKeyCartStringSet)
+                                        val productsInCart = spMyCart.getValueString(spKeyMyCart)
+                                        val productInMyCartList = Gson().fromJson(productsInCart.toString(),ProductCartListNotIn::class.java)
+                                        val index = productInMyCartList.carts.indexOfFirst { it2 ->
+                                            it2.product_id == productDetails.id
+                                        }
+                                        productInMyCartList.carts.removeAt(index)
+                                        spMyCart.save(spKeyMyCart,Gson().toJson(productInMyCartList).toString())
+                                        cartViewModel.getMyCartNotIn(productInMyCartList)
+                                        Log.d("cart-result","Index: $cartList")
+                                    }
+                                }
                             }
                         })
                 builder.create()
@@ -172,6 +187,7 @@ class CartFragment : Fragment() {
     }
 
     fun cartIsEmpty(customText:String?){
+        btnCheckout.isEnabled = false
         recyclerView.visibility = View.GONE
         tvSubtotal.text = customText
         tvSubtotal.textAlignment = View.TEXT_ALIGNMENT_CENTER
@@ -184,6 +200,47 @@ class CartFragment : Fragment() {
         tvSubtotal.textAlignment = View.TEXT_ALIGNMENT_VIEW_END
         tvSubtotal.setTextSize(TypedValue.COMPLEX_UNIT_SP,20f)
         tvSubtotal.setTextColor(Color.parseColor("#F44336"))
+    }
+
+    fun initViewModel(member_id: String?){
+        cartViewModel.getMyCartObservable().observe(viewLifecycleOwner, {
+            if (!it.isNullOrEmpty()){
+                    Log.d("cart-result","CartFragment: ${it.toString()}")
+                resetTextViewPrice()
+                recyclerView.visibility = View.VISIBLE
+                rvAdapter.CartAdapter(requireContext(),cartViewModel,homeViewModel,viewLifecycleOwner,it,loadingDialog,tvSubtotal,isLoggedIn)
+                rvAdapter.notifyDataSetChanged()
+                btnCheckout.isEnabled = true
+                cartList = it
+            }
+            else{
+                Log.d("cart-result","CartFragment: Else $it")
+                cartIsEmpty("Cart is empty")
+            }
+            stopRefreshLoading()
+        })
+
+        cartViewModel.getDeleteFromCartResponseObservable().observe(viewLifecycleOwner, Observer {
+            if (it.success){
+                Log.d("cart-result","CartFragment: $it")
+                cartViewModel.getMyCartFun(member_id!!)
+            }
+            else{
+                Log.d("cart-result","CartFragment: Else $it")
+            }
+            stopRefreshLoading()
+        })
+
+        cartViewModel.getErrorMyCartObservable().observe(viewLifecycleOwner, Observer {
+            if (it != 200){
+                if(it == 429){
+                    cartIsEmpty("Too many request, try again later.")
+                }
+                Log.d("cart-result","Error Code: $it")
+            }
+            stopRefreshLoading()
+        })
+
     }
 
     fun initRecyclerView() {

@@ -62,6 +62,7 @@ class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ViewHolder>() {
         val productPriceLabaled = "₱$productPrice"
         val productDescription = productDataSet?.get(position)!!.description
         val productIsDiscounted = productDataSet?.get(position)!!.is_discounted
+        val productStock = productDataSet?.get(position)!!.stocks
 
 
         Picasso.get().load(imageUrl).placeholder(R.drawable.no_image_available).resize(450, 450).into(holder.productImage);
@@ -79,6 +80,7 @@ class ItemsAdapter : RecyclerView.Adapter<ItemsAdapter.ViewHolder>() {
             viewItemActivity.putExtra("product_price_labaled",productPriceLabaled)
             viewItemActivity.putExtra("product_description",productDescription)
             viewItemActivity.putExtra("product_is_discounted",productIsDiscounted)
+            viewItemActivity.putExtra("product_stock",productStock)
             context.startActivity(viewItemActivity)
         }
     }

@@ -32,6 +32,8 @@ data class MemberDetails(
 
 data class Email(val email:String)
 data class EmailResponse(val success: Boolean?,val is_verified:Boolean?,val errors: JsonObject)
+data class Code(val code:String,val email:String)
+data class CodeResponse(val success: Boolean?,val is_verified:Boolean?,val code_success:Boolean,val errors: JsonObject)
 //
 //data class PayPalBody(val grant_type:String)
 //data class PayPalAccessTokenResponse(

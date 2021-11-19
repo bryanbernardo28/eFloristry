@@ -53,24 +53,10 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-
         plaintextEmail = findViewById(R.id.et_login_email_id)
         plaintextPassword = findViewById(R.id.et_login_password_id)
         loginButton = findViewById(R.id.btn_login_login_id)
         errorMessageTextView = findViewById(R.id.tv_login_errormessage_id)
-
-//        val config = CheckoutConfig(
-//            application = application,
-//            clientId = "AQSTMJeLX_XDTRWpkDtjqIIWRAH3P_KGNmPrVFlpPq1hznBBeqTRUjrd0WxVy1gMAvscfovlrz0PhBfW",
-//            environment = Environment.SANDBOX,
-//            returnUrl = "com.example.eflorisity://paypalpay",
-//            currencyCode = CurrencyCode.USD,
-//            userAction = UserAction.PAY_NOW,
-//            settingsConfig = SettingsConfig(
-//                loggingEnabled = true
-//            )
-//        )
-//        PayPalCheckout.setConfig(config)
 
         val description = getString(R.string.label_loading_login)
         loadingDialog = LoginLoadingDialog(description,this)
@@ -86,53 +72,31 @@ class LoginActivity : AppCompatActivity() {
             Log.d("login-result","From Activity: ${fromActivity}")
             var message: String? = null
             errorMessageTextView.setTextColor(Color.BLACK)
-            if (fromActivity.equals("register")){
-                message = "Register Successful.\nWe sent verification to your email."
-                errorMessageTextView.visibility = View.VISIBLE
-            }
-            else if(fromActivity.equals("resendVerification")){
-                if (intent.getBooleanExtra("isVerified",false)){
-                    message = "Your account is already verified."
+            when (fromActivity) {
+                "register" -> {
+                    message = "Register Successful.\nWe sent verification to your email."
+                    errorMessageTextView.visibility = View.VISIBLE
                 }
-                else{
-                    message = "Re-send verification to email successful."
+                "resendVerification" -> {
+                    message = if (intent.getBooleanExtra("isVerified",false)){
+                        "Your account is already verified."
+                    } else{
+                        "Re-send verification to email successful."
+                    }
+                    errorMessageTextView.visibility = View.VISIBLE
                 }
-                errorMessageTextView.visibility = View.VISIBLE
+                "verificationCode" -> {
+                    message = if (intent.getBooleanExtra("isVerified",false)){
+                        "Your account is already verified."
+                    } else{
+                        "Account verification successful."
+                    }
+                    errorMessageTextView.visibility = View.VISIBLE
+                }
             }
             errorMessageTextView.text = message
         }
     }
-
-//    fun processPayment(){
-//        PayPalCheckout.start(
-//            CreateOrder { createOrderActions ->
-//                val order = Order(
-//                    intent = OrderIntent.CAPTURE,
-//                    appContext = AppContext(
-//                        userAction = UserAction.PAY_NOW,
-//                        shippingPreference = ShippingPreference.NO_SHIPPING
-//                    ),
-//                    purchaseUnitList = listOf(
-//                        PurchaseUnit(
-//                            amount = Amount(
-//                                currencyCode = CurrencyCode.USD,
-//                                value = "10.00",
-//                            ),
-//                            shipping = Shipping()
-//                        )
-//                    ),
-//
-//
-//                )
-//                createOrderActions.create(order)
-//            },
-//            OnApprove { approval ->
-//                approval.orderActions.capture { captureOrderResult ->
-//                    Log.i("CaptureOrder", "Order successfully captured: $captureOrderResult")
-//                }
-//            }
-//        )
-//    }
 
     private fun submitLogin(){
         var email = plaintextEmail.text.toString()

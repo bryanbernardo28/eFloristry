@@ -69,7 +69,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             homeViewModel.getProducts("Bearer " + memberDetailsSp.getValueString(getString(R.string.spKeyToken)))
         }
 
-        homeViewModel.getProductsObservable().observe(viewLifecycleOwner, Observer<List<ProductDetails>>{
+        homeViewModel.getProductsObservable().observe(viewLifecycleOwner, {
             if (!it.isNullOrEmpty()){
                 Log.d("product-result","HomeFragment: $it")
                 tvNoItem.visibility = View.GONE

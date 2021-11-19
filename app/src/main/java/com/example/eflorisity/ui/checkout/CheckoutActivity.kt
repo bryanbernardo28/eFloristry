@@ -11,25 +11,19 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.eflorisity.BuildConfig
 import com.example.eflorisity.R
 import com.example.eflorisity.SharedPref
 import com.example.eflorisity.login.LoginLoadingDialog
-import com.example.eflorisity.retrofit.PayPalBasicAuthInstance
 import com.example.eflorisity.ui.cart.data.Cart
 import com.example.eflorisity.ui.checkout.data.Checkout
-import com.example.eflorisity.ui.checkout.data.CheckoutResponse
 import com.example.eflorisity.ui.checkout.data.ProductCheckout
 import com.example.eflorisity.ui.checkout.recyclerview_adapter.CheckoutListAdapter
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.paypal.checkout.PayPalCheckout
 import com.paypal.checkout.approve.OnApprove
 import com.paypal.checkout.cancel.OnCancel
@@ -39,7 +33,9 @@ import com.paypal.checkout.config.SettingsConfig
 import com.paypal.checkout.createorder.*
 import com.paypal.checkout.error.OnError
 import com.paypal.checkout.order.*
-import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CheckoutActivity : AppCompatActivity() {
     //static
@@ -93,6 +89,8 @@ class CheckoutActivity : AppCompatActivity() {
 
     private val paypalTag = "paypal-result"
 
+    private lateinit var tvEstReceived:TextView
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,6 +120,7 @@ class CheckoutActivity : AppCompatActivity() {
         tvTotalAmount = findViewById(R.id.tv_checkout_total_amount_id)
         tvPaymentMethod = findViewById(R.id.tv_checkout_payment_method_id)
         tvSf = findViewById(R.id.tv_checkout_sf_id)
+        tvEstReceived = findViewById(R.id.tv_checkout_est_received_id)
 
 
         etAddress = findViewById(R.id.et_checkout_address_id)
@@ -171,6 +170,22 @@ class CheckoutActivity : AppCompatActivity() {
         btnPaymentMethod.setOnClickListener { setPaymentMethod() }
         loadingDialog.dismissLoading()
         initViewModel()
+
+        val currentDate = Date()
+        val c = Calendar.getInstance()
+        c.time = currentDate
+        c.add(Calendar.DATE,3)
+        val estMinReceived = c.time
+        val dateFormatMin = SimpleDateFormat("dd")
+        val dateEstMinFormat = dateFormatMin.format(estMinReceived)
+
+        c.add(Calendar.DATE,6)
+        val estMaxReceived = c.time
+        val dateFormatMax = SimpleDateFormat("dd MMM")
+        val dateEstMaxFormat = dateFormatMax.format(estMaxReceived)
+
+        tvEstReceived.text = "Received by $dateEstMinFormat - $dateEstMaxFormat"
+
 
     }
 

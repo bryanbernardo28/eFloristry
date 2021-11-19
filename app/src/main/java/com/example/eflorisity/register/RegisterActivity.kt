@@ -176,7 +176,7 @@ class RegisterActivity : AppCompatActivity() {
                                 middle_name = middlename,
                                 email = email_address,
                                 contact_number = contact_number,
-                                type = member_type,
+                                type = "buyer",
                                 birthday = newBirthday,
                                 state = province.toString(),
                                 city = city.toString(),
@@ -204,10 +204,9 @@ class RegisterActivity : AppCompatActivity() {
                     Toast.makeText(this,"Register Successful",Toast.LENGTH_LONG).show()
                     Log.d("register-result","Register Successful")
                     Log.d("register-result","$it")
-                    val goToLoginActivity = Intent(this, LoginActivity::class.java)
-                    goToLoginActivity.putExtra("fromActivity","register")
-                    startActivity(goToLoginActivity)
-                    finish()
+                    val goToVerificationCodeActivity = Intent(this, VerificationCode::class.java)
+                    goToVerificationCodeActivity.putExtra("email",it.member!!.email)
+                    startActivity(goToVerificationCodeActivity)
                 }
                 else{
                     displayErrors(it)
