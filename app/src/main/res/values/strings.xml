@@ -15,6 +15,7 @@
 
     <!--SharePreference-->
     <string name="spMemberDetails">com.example.eflorisity.memberDetails</string>
+    <string name="spMyCart">com.example.eflorisity.myCart</string>
     <!--SharePreferences Key-->
     <string name="spKeyIsLoggedIn">isLoggedIn</string>
     <string name="spKeyToken">token</string>
@@ -26,6 +27,7 @@
     <string name="spKeyContactNumber">contactNumber</string>
     <string name="spKeyPhotoUrl">photoUrl</string>
     <string name="spKeyRole">role</string>
+    <string name="spKeyCartStringSet">myCart</string>
 
 
     <!--Logged In Member-->
@@ -102,6 +104,7 @@
     <string name="btn_submit_register">Submit</string>
     <string name="re_send_verification_text">Re-send Verification Code</string>
     <string name="re_send_button">Re-send</string>
+    <string name="verification_code">Verification Code</string>
     <string-array name="member_type_choice">
         <item>Buyer</item>
         <item>Seller</item>
@@ -125,4 +128,15 @@
     <string name="address_inforation_request_code">1</string>
     <string name="checkout_request_code">2</string>
     <string name="custom_tabs_request_code">3</string>
+
+
+
+    <!--Account Information-->
+    <string name="firstname_label">First Name: </string>
+    <string name="middlename_label">Middle Name: </string>
+    <string name="lastname_label">Last Name: </string>
+    <string name="email_label">Email: </string>
+    <string name="contact_number_label">Contact Number: </string>
+    <string name="birthday_label">Birthday: </string>
+    <string name="btn_update_label">Update</string>
 </resources>

@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.eflorisity.login.data.*
 import com.example.eflorisity.login.retrofit.LoginRetroServiceInterface
-import com.example.eflorisity.retrofit.PayPalBasicAuthInstance
-import com.example.eflorisity.retrofit.PayPalRetroInstance
 import com.example.eflorisity.retrofit.RetroInstance
 //import com.paypal.checkout.PayPalCheckout
 //import com.paypal.checkout.approve.OnApprove

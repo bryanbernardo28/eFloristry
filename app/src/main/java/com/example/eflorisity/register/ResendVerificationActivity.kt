@@ -54,20 +54,22 @@ class ResendVerificationActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
         viewModel.getResendVerificationData().observe(this, androidx.lifecycle.Observer {
             if (it != null){
-                val goToLoginActivity = Intent(this, LoginActivity::class.java)
+                val emailText = tieEmail.text.toString()
+
                 if (it.success == true){
                     if (it.is_verified == true){
+                        val goToLoginActivity = Intent(this, LoginActivity::class.java)
                         goToLoginActivity.putExtra("fromActivity","resendVerification")
                         goToLoginActivity.putExtra("isVerified",true)
+                        startActivity(goToLoginActivity)
                     }
                     else{
 //                        Toast.makeText(this,"Resend Verification Successful", Toast.LENGTH_LONG).show()
-                        goToLoginActivity.putExtra("fromActivity","resendVerification")
+                        val goToVerificationCodeActivity = Intent(this, VerificationCode::class.java)
+                        goToVerificationCodeActivity.putExtra("email",emailText)
+                        startActivity(goToVerificationCodeActivity)
                     }
-
-
                 }
-                startActivity(goToLoginActivity)
                 finish()
             }
             else{

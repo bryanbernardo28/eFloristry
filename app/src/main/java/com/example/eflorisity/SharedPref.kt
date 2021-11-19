@@ -2,7 +2,6 @@ package com.example.eflorisity
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.eflorisity.login.retrofit.HomeRetroServiceInterface
 
 class SharedPref(context: Context, PrefName: String) {
     val sp = context.getSharedPreferences(PrefName, Context.MODE_PRIVATE)
@@ -37,6 +36,12 @@ class SharedPref(context: Context, PrefName: String) {
         editor.commit()
     }
 
+    fun saveStringSet(KEY_NAME: String, value: HashSet<String>){
+        val editor: SharedPreferences.Editor = sp.edit()
+        editor.putStringSet(KEY_NAME, value)
+        editor.commit()
+    }
+
     fun getValueString(KEY_NAME: String): String? {
         return sp.getString(KEY_NAME, null)
     }
@@ -55,6 +60,10 @@ class SharedPref(context: Context, PrefName: String) {
 
     fun getValueFloat(KEY_NAME: String, defaultValue: Float): Float {
         return sp.getFloat(KEY_NAME, defaultValue)
+    }
+
+    fun getValueStringSet(KEY_NAME: String, defaultValue: MutableSet<String>): MutableSet<String>? {
+        return sp.getStringSet(KEY_NAME, defaultValue)
     }
 
     fun clearSharedPreference() {

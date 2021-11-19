@@ -37,6 +37,7 @@ class CheckoutViewModel:ViewModel() {
                 else{
                     val error = JSONObject(response.errorBody()!!.string())
                     Log.d("order-product-result","Response: ${error}")
+
 //
 //                    val checkoutResponse = CheckoutResponse(List<error>)
 //                    checkoutLiveData.postValue(checkoutResponse)

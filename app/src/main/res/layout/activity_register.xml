@@ -165,6 +165,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:visibility="gone"
                 app:boxBackgroundMode="outline"
                 app:layout_constraintBottom_toTopOf="@+id/til_register_birthday_id"
                 app:layout_constraintEnd_toEndOf="parent"

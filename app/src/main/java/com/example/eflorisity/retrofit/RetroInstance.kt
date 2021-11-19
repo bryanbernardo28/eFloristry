@@ -10,10 +10,10 @@ import com.google.gson.GsonBuilder
 
 class RetroInstance {
     companion object{
-//        val baseUrl = "http://10.0.2.2:8000"
+        val baseUrl = "http://10.0.2.2:8000"
 //        val baseUrl = "http://192.168.50.69:8000"
-        val baseUrl = "https://www.eflouristry.com"
-        val BASE_URL = "$baseUrl/api/mobile/"
+//        val baseUrl = "https://www.eflouristry.com"
+        private val BASE_URL = "$baseUrl/api/mobile/"
 
         fun getInstance(): Retrofit {
             val client = OkHttpClient.Builder()
