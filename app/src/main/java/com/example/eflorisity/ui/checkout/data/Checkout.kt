@@ -1,5 +1,9 @@
 package com.example.eflorisity.ui.checkout.data
 
+import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
+import org.json.JSONObject
+
 data class Checkout(
     val member_id:String,
     val contact_number:String,
@@ -13,6 +17,7 @@ data class Checkout(
     val payment_method:String,
     val notes:String,
     val total_amount:String,
+    val shipping_fee:String,
     val status:Int,
     val paypalOrderID:String?,
     val paypalPayerID:String?,
@@ -22,6 +27,7 @@ data class Checkout(
 data class ProductCheckout(
     val id:String?,
     val price:String?,
+    val weight:String?,
     val qty:Int?
 )
 
@@ -29,3 +35,10 @@ data class CheckoutResponse(
     val success:Boolean
 )
 
+data class GetShippingFee(
+    val carts: ArrayList<ProductCheckout>,
+    val state: String
+)
+data class ShippingFeeResponse(
+    val rate:String
+)

@@ -16,6 +16,7 @@ class CartViewModel : ViewModel() {
     var myCartLiveData: MutableLiveData<ArrayList<Cart>> = MutableLiveData()
     var errorMyCart : MutableLiveData<Int> = MutableLiveData()
     var deleteFromCartResponse : MutableLiveData<DeleteItemFromCartResponse> = MutableLiveData()
+    var computedQuantity:MutableLiveData<Int> = MutableLiveData()
 
     fun getMyCartObservable(): MutableLiveData<ArrayList<Cart>> {
         return myCartLiveData
@@ -27,6 +28,10 @@ class CartViewModel : ViewModel() {
 
     fun getErrorMyCartObservable(): MutableLiveData<Int>{
         return errorMyCart
+    }
+
+    fun getComputedQuantityObservable(): MutableLiveData<Int>{
+        return computedQuantity
     }
 
 
@@ -99,5 +104,27 @@ class CartViewModel : ViewModel() {
             }
 
         })
+    }
+
+
+    fun computeQuantity(qty:Int,stock:Int,isPlus:Boolean){
+        var qtyVal = if (isPlus){
+            increment(qty,stock)
+        } else{
+            decrement(qty)
+        }
+        computedQuantity.postValue(qtyVal)
+    }
+
+    private fun decrement(qty:Int):Int {
+        var qtyVal = qty
+        if (qty > 1) qtyVal-- else qty
+        return qtyVal
+    }
+
+    private fun increment(qty:Int, stock:Int):Int {
+        var qtyVal = qty
+        if (stock > qty) qtyVal++ else qty
+        return qtyVal
     }
 }

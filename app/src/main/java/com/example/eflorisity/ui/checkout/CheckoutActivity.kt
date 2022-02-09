@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +21,7 @@ import com.example.eflorisity.SharedPref
 import com.example.eflorisity.login.LoginLoadingDialog
 import com.example.eflorisity.ui.cart.data.Cart
 import com.example.eflorisity.ui.checkout.data.Checkout
+import com.example.eflorisity.ui.checkout.data.GetShippingFee
 import com.example.eflorisity.ui.checkout.data.ProductCheckout
 import com.example.eflorisity.ui.checkout.recyclerview_adapter.CheckoutListAdapter
 import com.google.android.material.textfield.TextInputEditText
@@ -36,10 +38,9 @@ import com.paypal.checkout.order.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-
 class CheckoutActivity : AppCompatActivity() {
     //static
-    val sfValue = 0
+    var sfValue = 0
 
     private lateinit var rvAdapter: CheckoutListAdapter
     private lateinit var recyclerView: RecyclerView
@@ -142,7 +143,7 @@ class CheckoutActivity : AppCompatActivity() {
             var itemTotal = product.price!!.toInt() * cart.quantity.toInt()
             priceSubTotal += itemTotal
 
-            var productDetails = ProductCheckout(id = product.id,price = product.price,qty = cart.quantity.toInt())
+            var productDetails = ProductCheckout(id = product.id,price = product.price, weight = product.weight ,qty = cart.quantity.toInt())
             productCheckout.add(productDetails)
         }
 
@@ -157,15 +158,12 @@ class CheckoutActivity : AppCompatActivity() {
 
         etAddress.setOnClickListener {
             val goToAddressActivity = Intent(this, AddressActivity::class.java)
-            startActivityForResult(goToAddressActivity,getString(R.string.address_inforation_request_code).toInt())
+//            startActivityForResult(goToAddressActivity,getString(R.string.address_inforation_request_code).toInt())
+            addressActivityResult.launch(goToAddressActivity)
         }
 
 
-        tvSf.text = "₱$sfValue"
-
-        priceSubTotal += sfValue
-
-        tvTotalAmount.text = "Total Amount: ₱$priceSubTotal"
+        computeTotalAmount(sfValue)
 
         btnPaymentMethod.setOnClickListener { setPaymentMethod() }
         loadingDialog.dismissLoading()
@@ -246,6 +244,7 @@ class CheckoutActivity : AppCompatActivity() {
             payment_method = paymentMethod,
             notes = notes.toString(),
             total_amount = priceSubTotal.toString(),
+            shipping_fee = sfValue.toString(),
             status = orderStatus,
             carts = productCheckout,
             paypalOrderID = paypalOrderId,
@@ -304,21 +303,32 @@ class CheckoutActivity : AppCompatActivity() {
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(CheckoutViewModel::class.java)
-        viewModel.addOrderProductsObservable().observe(this, {
-            if (it != null){
-                Log.d("order-product-result","$it")
-                if (it.success){
-                    Toast.makeText(this,getString(R.string.place_order_success),Toast.LENGTH_LONG).show()
+        viewModel.addOrderProductsObservable().observe(this) {
+            if (it != null) {
+                Log.d("order-product-result", "$it")
+                if (it.success) {
+                    Toast.makeText(this, getString(R.string.place_order_success), Toast.LENGTH_LONG)
+                        .show()
                     val sendBackResult = Intent()
                     setResult(Activity.RESULT_OK, sendBackResult)
                     finish()
                 }
-            }
-            else{
-                Log.d("order-product-result","$it")
+            } else {
+                Log.d("order-product-result", "$it")
             }
             loadingDialog.dismissLoading()
-        })
+        }
+
+        viewModel.getShippingFeeObservable().observe(this) { sfVal ->
+            if (!sfVal.isNullOrEmpty()) {
+                Log.d("sf-result", "$sfVal")
+                sfValue = sfVal.toInt()
+                computeTotalAmount(sfVal.toInt())
+            } else {
+                Log.d("sf-result", "$sfVal")
+            }
+            loadingDialog.dismissLoading()
+        }
     }
 
     fun initRecyclerView() {
@@ -331,21 +341,23 @@ class CheckoutActivity : AppCompatActivity() {
         recyclerView.adapter = rvAdapter
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_CANCELED){
-            when(requestCode){
-                getString(R.string.address_inforation_request_code).toInt() -> {
-                    region = data?.getStringExtra("region").toString()
-                    province = data?.getStringExtra("province").toString()
-                    city = data?.getStringExtra("city").toString()
-                    barangay = data?.getStringExtra("barangay").toString()
-                    postalCode = data?.getStringExtra("postalCode").toString()
-                    detailedAddress = data?.getStringExtra("completeAddress").toString()
-                    tilAddress.clearError()
-                    etAddress.setText(detailedAddress)
-                }
-            }
+    private val addressActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        if (it.resultCode == Activity.RESULT_OK){
+            region = it.data?.getStringExtra("region").toString()
+            province = it.data?.getStringExtra("province").toString()
+            city = it.data?.getStringExtra("city").toString()
+            barangay = it.data?.getStringExtra("barangay").toString()
+            postalCode = it.data?.getStringExtra("postalCode").toString()
+            detailedAddress = it.data?.getStringExtra("completeAddress").toString()
+            tilAddress.clearError()
+            etAddress.setText(detailedAddress)
+            val shippingFee = GetShippingFee(
+                carts = productCheckout,
+                state = province.toString()
+            )
+            Log.d("sf-result","Result: $shippingFee")
+            loadingDialog.startLoading()
+            viewModel.getShippingFee(shippingFee)
         }
     }
 
@@ -354,7 +366,7 @@ class CheckoutActivity : AppCompatActivity() {
         error = null
     }
 
-    fun checkInputAddressHasError(completeAddress:String):Boolean{
+    private fun checkInputAddressHasError(completeAddress:String):Boolean{
         var hasError = false
         if (checkNullOrEmptyString(completeAddress)){
             if (checkNullOrEmptyString(completeAddress)){
@@ -369,7 +381,15 @@ class CheckoutActivity : AppCompatActivity() {
         return hasError
     }
 
-    fun checkNullOrEmptyString(value:String):Boolean{
+    fun computeTotalAmount(sfVal:Int){
+        tvSf.text = "₱$sfVal"
+
+        priceSubTotal += sfVal
+
+        tvTotalAmount.text = "Total Amount: ₱$priceSubTotal"
+    }
+
+    private fun checkNullOrEmptyString(value:String):Boolean{
         return value.trim().isNullOrEmpty()
     }
 
@@ -384,3 +404,4 @@ class CheckoutActivity : AppCompatActivity() {
         return true
     }
 }
+

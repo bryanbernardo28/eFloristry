@@ -24,7 +24,12 @@
     <string name="spKeyLastName">lastName</string>
     <string name="spKeyMiddleName">middleName</string>
     <string name="spKeyEmail">email</string>
+    <string name="spKeyBirthday">birthday</string>
     <string name="spKeyContactNumber">contactNumber</string>
+    <string name="spKeyAddress">address</string>
+    <string name="spKeyState">state</string>
+    <string name="spKeyCity">city</string>
+    <string name="spKeyPostalCode">postalCode</string>
     <string name="spKeyPhotoUrl">photoUrl</string>
     <string name="spKeyRole">role</string>
     <string name="spKeyCartStringSet">myCart</string>
@@ -84,8 +89,9 @@
     <string-array name="region_list">
         <item>Metro Manila</item>
         <item>Mindanao</item>
-        <item>North Luzon</item>
-        <item>South Luzon</item>
+        <item>Luzon</item>
+<!--        <item>North Luzon</item>-->
+<!--        <item>South Luzon</item>-->
         <item>Visayas</item>
     </string-array>
     <string name="completed_address_hint">Complete Address</string>

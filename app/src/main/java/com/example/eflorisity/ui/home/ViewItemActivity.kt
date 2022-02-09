@@ -98,12 +98,13 @@ class ViewItemActivity : AppCompatActivity() {
             etQuantity.filters = arrayOf<InputFilter>(InputFilterMinMax("1", productStock))
             builder.setView(dialogLayout)
             builder.setPositiveButton("Proceed") { _, _ ->
+                loadingDialog.startLoading()
                 if(checkIsLoggedIn()){
-                    loadingDialog.startLoading()
                     val productCart = ProductCart(
                         member_id = memberId!!,
                         product_id = productId!!,
-                        quantity = quantity
+                        quantity = quantity,
+                        isAdd = null
                     )
                     addToCart(productCart)
                 }
@@ -199,7 +200,7 @@ class ViewItemActivity : AppCompatActivity() {
 
     }
 
-    fun addToCart(productCart: ProductCart){
+    private fun addToCart(productCart: ProductCart){
         val token = "Bearer " + memberDetailsSp.getValueString(getString(R.string.spKeyToken));
         viewModel.addToCart(token,productCart)
     }
@@ -261,6 +262,7 @@ class ViewItemActivity : AppCompatActivity() {
         })
 
         viewModel.getComputedQuantityObservable().observe(this,{
+            loadingDialog.dismissLoading()
             etQuantity.setText(it.toString())
             quantity = it
             Log.d("cart-result","Res: $it")
@@ -287,6 +289,7 @@ class ViewItemActivity : AppCompatActivity() {
         toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 700)
         toast.show()
         quantity = 1
+        loadingDialog.dismissLoading()
     }
 
     override fun onBackPressed() {

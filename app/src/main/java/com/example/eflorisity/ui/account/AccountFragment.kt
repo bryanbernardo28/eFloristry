@@ -44,15 +44,25 @@ class AccountFragment : Fragment() {
 //        }
 
 
-        val logoutButton:Button = binding.btnAccountLogoutId
-        logoutButton.setOnClickListener {
+        binding.btnAccountLogoutId.setOnClickListener {
             memberDetailsSp.clearSharedPreference()
             val goToLoginActivity = Intent(activity, LoginActivity::class.java)
             startActivity(goToLoginActivity)
             activity?.finish()
         }
+
+        binding.btnAccountAccountInfo.setOnClickListener {
+            val goToAccountInfo = Intent(activity, AccountInformationActivity::class.java)
+            startActivity(goToAccountInfo)
+        }
+
         return root
     }
+
+//    fun accountInformation(view:View){
+//        val goToAccountInfo = Intent(activity, AccountInformationActivity::class.java)
+//        startActivity(goToAccountInfo)
+//    }
 
 
     override fun onDestroyView() {
