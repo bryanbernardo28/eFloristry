@@ -33,15 +33,16 @@ import com.example.eflorisity.login.LoginLoadingDialog
 import com.example.eflorisity.ui.cart.data.Cart
 import com.example.eflorisity.ui.cart.recyclerview_adapter.CartAdapter
 import com.example.eflorisity.ui.checkout.CheckoutActivity
-import com.example.eflorisity.ui.home.data.ProductDetails
 import android.R.attr.data
+import android.view.Gravity
+import android.widget.ImageButton
+import com.example.eflorisity.ui.cart.recyclerview_adapter.CartClickListener
 import com.example.eflorisity.ui.home.HomeViewModel
-import com.example.eflorisity.ui.home.data.ProductCartListNotIn
-import com.example.eflorisity.ui.home.data.ProductCartNotIn
+import com.example.eflorisity.ui.home.data.*
 import com.google.gson.Gson
 
 
-class CartFragment : Fragment() {
+class CartFragment : Fragment(),CartClickListener {
 
     private lateinit var cartViewModel: CartViewModel
     private lateinit var homeViewModel:HomeViewModel
@@ -122,7 +123,7 @@ class CartFragment : Fragment() {
     }
 
 
-    fun getMyCartNotIn(){
+    private fun getMyCartNotIn(){
         val spMyCart = SharedPref(requireContext(),getString(R.string.spMyCart))
         val spKeyMyCart = getString(R.string.spKeyCartStringSet)
         val productsInCart = spMyCart.getValueString(spKeyMyCart)
@@ -172,6 +173,10 @@ class CartFragment : Fragment() {
         }
     }
 
+    inner class CartEventViewHolder(){
+
+    }
+
     override fun onResume() {
         super.onResume()
         Log.d("cart-result","On Resume Called")
@@ -205,12 +210,14 @@ class CartFragment : Fragment() {
     fun initViewModel(member_id: String?){
         cartViewModel.getMyCartObservable().observe(viewLifecycleOwner, {
             if (!it.isNullOrEmpty()){
-                    Log.d("cart-result","CartFragment: ${it.toString()}")
+                Log.d("cart-result","CartFragment: ${it.toString()}")
                 resetTextViewPrice()
+                val totalPrice = computeTotalPrice(it)
                 recyclerView.visibility = View.VISIBLE
-                rvAdapter.CartAdapter(requireContext(),cartViewModel,homeViewModel,viewLifecycleOwner,it,loadingDialog,tvSubtotal,isLoggedIn)
+                rvAdapter.CartAdapter(requireContext(),cartViewModel,it,loadingDialog,isLoggedIn,this,totalPrice)
                 rvAdapter.notifyDataSetChanged()
                 btnCheckout.isEnabled = true
+                tvSubtotal.text = "Total Price: ₱$totalPrice"
                 cartList = it
             }
             else{
@@ -241,6 +248,33 @@ class CartFragment : Fragment() {
             stopRefreshLoading()
         })
 
+        homeViewModel.getAddToCartResponse().observe(viewLifecycleOwner, Observer<ProductCartResponse>{
+            if (it != null){
+                handleResponse(it)
+                Log.d("cart-result",it.toString())
+            }
+            else{
+                Toast.makeText(requireContext(),"Failed to add to cart.",Toast.LENGTH_LONG).show()
+                Log.d("cart-result","$it")
+            }
+            loadingDialog.dismissLoading()
+        })
+
+    }
+
+    private fun handleResponse(it:ProductCartResponse){
+        if(it.success == true){
+            successAddToCart()
+        }
+        else{
+            Toast.makeText(requireContext(),"Item add to cart failed.",Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun successAddToCart(){
+        val toast = Toast.makeText(context,"Item successfully added to cart.", Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 700)
+        toast.show()
     }
 
     fun initRecyclerView() {
@@ -256,4 +290,60 @@ class CartFragment : Fragment() {
         stopRefreshLoading()
         Log.d("cart-result","onDestroyView")
     }
+
+    override fun onCartItemClicked(newQty: Int, productId: String, position: Int,isIncrement:Int) {
+//        Log.d("cart-result","New Quantity: $newQty , Position: $position")
+        loadingDialog.startLoading()
+        if (!isLoggedIn){
+            cartList?.find { it.product.id == productId }?.quantity = newQty.toString()
+            val totalPrice = computeTotalPrice(cartList)
+            rvAdapter.CartAdapter(requireContext(),cartViewModel,cartList,loadingDialog,isLoggedIn,this,totalPrice)
+            rvAdapter.notifyItemChanged(position)
+            tvSubtotal.text = "Total Price: ₱$totalPrice"
+
+            val spCart = SharedPref(requireContext(), getString(R.string.spMyCart))
+            val spKeyMyCart = getString(R.string.spKeyCartStringSet)
+            var getMyCart = spCart.getValueString(spKeyMyCart)
+            var productInMyCartList = Gson().fromJson(getMyCart, ProductCartListNotIn::class.java)
+            val productIndex = productInMyCartList.carts.indexOfFirst { it.product_id == productId }
+            productInMyCartList.carts[productIndex].quantity = newQty
+            spCart.save(spKeyMyCart,Gson().toJson(productInMyCartList).toString())
+
+            loadingDialog.dismissLoading()
+        }
+        else{
+            val memberId = memberDetailsSp.getValueString(getString(R.string.spKeyId))
+
+            cartList?.find { it.product.id == productId }?.quantity = newQty.toString()
+            val totalPrice = computeTotalPrice(cartList)
+            rvAdapter.CartAdapter(requireContext(),cartViewModel,cartList,loadingDialog,isLoggedIn,this,totalPrice)
+            rvAdapter.notifyItemChanged(position)
+            tvSubtotal.text = "Total Price: ₱$totalPrice"
+
+            val productCart = ProductCart(
+                member_id = memberId!!,
+                product_id = productId!!,
+                quantity = 1,
+                isAdd = isIncrement
+            )
+            updateCart(productCart)
+        }
+    }
+
+
+    private fun updateCart(productCart: ProductCart){
+        val token = "Bearer " + memberDetailsSp.getValueString(getString(R.string.spKeyToken));
+        homeViewModel.addToCart(token,productCart)
+    }
+
+    private fun computeTotalPrice(cartList:ArrayList<Cart>):Int{
+        var totalPrice = 0
+        cartList.forEach {
+            var productSubTotal = it.product.price!!.toInt() * it.quantity.toInt()
+//            Log.d("cart-result","${it.product.price} * ${it.quantity} = $productSubTotal")
+            totalPrice += productSubTotal
+        }
+        return totalPrice
+    }
+
 }

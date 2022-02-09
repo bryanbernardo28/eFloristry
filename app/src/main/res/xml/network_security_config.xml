@@ -3,6 +3,7 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">10.0.2.2</domain>
         <domain includeSubdomains="true">192.168.50.69</domain>
+        <domain includeSubdomains="true">3.129.13.154</domain>
         <domain includeSubdomains="true">eflouristry.com</domain>
         <domain includeSubdomains="true">api-m.sandbox.paypal.com</domain>
         <domain includeSubdomains="true">api-m.paypal.com</domain>

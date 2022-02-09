@@ -11,10 +11,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class OrdersViewModel : ViewModel() {
-    var ordersWithProductLiveData: MutableLiveData<ArrayList<OrdersWithProduct>> = MutableLiveData()
+    var ordersWithProductLiveData: MutableLiveData<ArrayList<OrdersWithProduct>?> = MutableLiveData()
     var getErrorCodeLiveData: MutableLiveData<Int> = MutableLiveData()
 
-    fun getOrdersWithProductObservable(): MutableLiveData<ArrayList<OrdersWithProduct>>{
+    fun getOrdersWithProductObservable(): MutableLiveData<ArrayList<OrdersWithProduct>?>{
         return ordersWithProductLiveData
     }
 

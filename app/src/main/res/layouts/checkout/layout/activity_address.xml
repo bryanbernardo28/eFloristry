@@ -82,6 +82,10 @@
                     android:id="@+id/et_address_province_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="true"
                     android:hint="@string/province_hint"
                     android:inputType="text|textCapWords"
                     android:singleLine="true" />

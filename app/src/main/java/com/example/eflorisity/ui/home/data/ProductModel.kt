@@ -13,6 +13,7 @@ data class ProductDetails(
         val description:String?,
         val price:String?,
         val discount:String?,
+        val weight:String?,
         val photo_url:String?,
         val is_discounted:Int?,
         val stocks:String?
@@ -21,7 +22,8 @@ data class ProductDetails(
 data class ProductCart(
         val member_id:String,
         val product_id:String,
-        val quantity:Int
+        val quantity:Int,
+        val isAdd:Int?
 )
 
 data class ProductCartNotIn(
@@ -37,7 +39,8 @@ data class ProductCartResponse(
         val member_id:String?,
         val product_id: String?,
         val success:Boolean?,
-        val errorString:String?
+        val errorString:String?,
+        val isAdd:Int?
 )
 
 data class ProductFechError(val errorCode:String)

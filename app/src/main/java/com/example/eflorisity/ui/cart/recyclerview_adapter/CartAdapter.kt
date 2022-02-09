@@ -22,7 +22,6 @@ import com.example.eflorisity.SharedPref
 import com.example.eflorisity.login.LoginLoadingDialog
 import com.example.eflorisity.ui.cart.CartFragment
 import com.example.eflorisity.ui.cart.CartViewModel
-import com.example.eflorisity.ui.home.HomeViewModel
 import com.example.eflorisity.ui.home.data.ProductCartListNotIn
 import com.google.gson.Gson
 
@@ -31,26 +30,22 @@ class CartAdapter: RecyclerView.Adapter<CartAdapter.ViewHolder>() {
     private var cartList: ArrayList<Cart>? = null
     private lateinit var context: Context
     private lateinit var cartViewModel: CartViewModel
-    private lateinit var homeViewModel: HomeViewModel
-    private lateinit var viewLifecycleOwner: LifecycleOwner
     private lateinit var loadingDialog: LoginLoadingDialog
     private var totalPrice:Int = 0
-    private lateinit var tvTotal:TextView
     private var isLoggedIn:Boolean = false
     private lateinit var spCart: SharedPref
+    private lateinit var cartClickListener: CartClickListener
 
 
-    fun CartAdapter(context: Context, cartViewModel: CartViewModel,homeViewModel:HomeViewModel,viewLifecycleOwner:LifecycleOwner, cartList:ArrayList<Cart>, loadingDialog:LoginLoadingDialog,tvTotal:TextView,isLoggedIn:Boolean){
+    fun CartAdapter(context: Context, cartViewModel: CartViewModel, cartList:ArrayList<Cart>, loadingDialog:LoginLoadingDialog,isLoggedIn:Boolean,cartClickListener: CartClickListener,totalPrice:Int){
         this.cartList = cartList
         this.context = context
         this.cartViewModel = cartViewModel
-        this.homeViewModel = homeViewModel
-        this.viewLifecycleOwner = viewLifecycleOwner
         this.loadingDialog = loadingDialog
-        this.tvTotal = tvTotal
-        totalPrice = 0
+        this.totalPrice = totalPrice
         this.isLoggedIn = isLoggedIn
         this.spCart = SharedPref(context,context.getString(R.string.spMyCart))
+        this.cartClickListener = cartClickListener
     }
 
     fun get(pos:Int):String?{
@@ -93,7 +88,6 @@ class CartAdapter: RecyclerView.Adapter<CartAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        var totalPrice = 0
         val product:ProductDetails = cartList?.get(position)!!.product
         val member_id = cartList!![position].member_id.toString();
         val photoUrl = product.photo_url
@@ -107,13 +101,9 @@ class CartAdapter: RecyclerView.Adapter<CartAdapter.ViewHolder>() {
         val productTotalPrice = "Total Item Price: ₱$productTotalPriceComputed"
         val stocks = product.stocks!!.toInt()
 
-        totalPrice += productTotalPriceComputed
+//        holder.totalPrice += productTotalPriceComputed
 
-        if (position == cartList!!.size-1){
-            tvTotal.text = "Total Price: ₱$totalPrice"
-        }
-
-        Picasso.get().load(imageUrl).placeholder(R.drawable.no_image_available).resize(450, 450).into(holder.productImage);
+        Picasso.get().load(imageUrl).placeholder(R.drawable.no_image_available).resize(450, 450).into(holder.productImage)
         holder.productName.text = productName
         holder.productPrice.text = productPriceLabaled
         holder.productQuantity.text = productQuantityLabeled
@@ -126,38 +116,26 @@ class CartAdapter: RecyclerView.Adapter<CartAdapter.ViewHolder>() {
             true
         }
 
+        holder.btnAdd.isEnabled = stocks!!.toInt() > productQuantity
+        holder.btnMinus.isEnabled = productQuantity > 1
+
         holder.btnAdd.setOnClickListener {
             var qtyVal = productQuantity
-            if (stocks > productQuantity) qtyVal++
-            changeQuantity(qtyVal, product.id.toString())
-            Log.d("cart-result","New quantity: $qtyVal")
-            holder.productQty.text = qtyVal.toString()
-            notifyItemChanged(position)
+            var isStocksGreaterThanQty = stocks > productQuantity
+            if (isStocksGreaterThanQty) qtyVal++
+            cartClickListener.onCartItemClicked(qtyVal, product.id.toString(),position,0)
+//            holder.btnAdd.isEnabled = isStocksGreaterThanQty
         }
 
         holder.btnMinus.setOnClickListener {
             var qtyVal = productQuantity
-            if (productQuantity > 1) qtyVal--
-            changeQuantity(qtyVal, product.id.toString())
-            Log.d("cart-result","New quantity: $qtyVal")
-            holder.productQty.text = qtyVal.toString()
-            notifyItemChanged(position)
+            var isGreaterThanOne = productQuantity > 1
+            if (isGreaterThanOne) qtyVal--
+            cartClickListener.onCartItemClicked(qtyVal,product.id.toString(),position,1)
+//            holder.btnMinus.isEnabled = isGreaterThanOne
         }
     }
 
-    fun changeQuantity(newQty:Int,productId:String){
-        if (!isLoggedIn){
-            val spKeyMyCart = context.getString(R.string.spKeyCartStringSet)
-            var getMyCart = spCart.getValueString(spKeyMyCart)
-            var productInMyCartList = Gson().fromJson(getMyCart, ProductCartListNotIn::class.java)
-            val productIndex = productInMyCartList.carts.indexOfFirst { it.product_id == productId }
-            productInMyCartList.carts[productIndex].quantity = newQty
-            spCart.save(spKeyMyCart,Gson().toJson(productInMyCartList).toString())
-        }
-        else{
-
-        }
-    }
 
     override fun getItemCount(): Int = if (cartList.isNullOrEmpty()) 0 else cartList?.size!!
 
